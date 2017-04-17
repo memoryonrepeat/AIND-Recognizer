@@ -150,4 +150,30 @@ class SelectorCV(ModelSelector):
         warnings.filterwarnings("ignore", category=DeprecationWarning)
 
         # TODO implement model selection using CV
-        raise NotImplementedError
+        
+        best_score = float("-inf")
+        best_model = self.base_model(self.n_constant)
+
+        # Can't split to K-fold with less than 3 examples
+        if len(self.sequences)<3:
+            return best_model
+
+        try:
+            for num_states in range(self.min_n_components, self.max_n_components+1):
+                kf = KFold(3, shuffle = True)
+                cv_scores = []
+                # Selection criteria is the average log likehood between folds
+                # To calculate average, need to loop to get score for each fold then normalize
+                for train_indices, test_indices in kf.split(self.sequences):
+                    train_X, train_lengths = combine_sequences(train_indices, self.sequences)
+                    test_X, test_lengths = combine_sequences(test_indices, self.sequences)
+                    current_model = self.base_model(num_states, train_X, train_lengths)
+                    cv_scores.append(current_model.score(test_X, test_lengths))
+                mean_cv_score = np.mean(cv_scores)
+                if (mean_cv_score > best_score):
+                    best_score = mean_cv_score
+                    best_model = current_model
+            return best_model
+        except:
+            return best_model
+            
