@@ -21,5 +21,26 @@ def recognize(models: dict, test_set: SinglesData):
     probabilities = []
     guesses = []
     # TODO implement the recognizer
-    # return probabilities, guesses
-    raise NotImplementedError
+    
+    # For each test case: 
+    # - Iterate through every trained model of the words in the training set (there is 1 optimal model for each word)
+    # - Make a dictionary to record the score of the test case for each model
+    # - Add that dictionary to the list of probabilities
+    # - Model of highest score is the final guess for that test case. Add that to the list of guesses.
+    for test_word, (X, lengths) in test_set.get_all_Xlengths().items():
+      test_word_probabilities = {}
+      best_guess = None
+      best_score = float("-inf")
+      for word, model in models.items():
+        try:
+          score = model.score(X,lengths)
+        except:
+          score = float("-inf")
+        test_word_probabilities[word] = score
+        if score > best_score:
+          best_score = score
+          best_guess = word
+      probabilities.append(test_word_probabilities)
+      guesses.append(best_guess)
+
+    return probabilities, guesses
