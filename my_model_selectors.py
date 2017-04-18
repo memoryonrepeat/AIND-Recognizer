@@ -27,8 +27,6 @@ class ModelSelector(object):
         self.max_n_components = max_n_components
         self.random_state = random_state
         self.verbose = verbose
-        self.num_features = len(self.X[0])
-        self.num_datapoints = len(self.X)
 
     def select(self):
         raise NotImplementedError
@@ -69,17 +67,6 @@ class SelectorBIC(ModelSelector):
     http://www2.imm.dtu.dk/courses/02433/doc/ch6_slides.pdf
     Bayesian information criteria: BIC = -2 * logL + p * logN
 
-    - Let: 
-    m = # of states 
-    f = # of features
-
-    - Number of parameters are the amount of variables that HMM has to learn to optimize the model.
-    - Which equals to # of probabilities in transitional matrix + # of emission probabilities + # of starting probabilities
-    - Number of transitional probabilities =  # of cells in the matrix by default (m^2), but since the last column can be inferred from the rest (total probabilities has to be equal to 1), we only need m*(m-1).
-    - Number of emission probabilities = 2*f*m (1 for mean and 1 for variance, assuming a diagonal covariance matrix)
-    - Number of starting probabilities = m-1 (m by default but again, the last one can be inferred)
-
-    => p = m*(m-1) + 2*f*m + (m-1) = m^2 + 2*f*m -1
 
     """
 
@@ -94,6 +81,20 @@ class SelectorBIC(ModelSelector):
         best_score = float("inf")
         best_model = self.base_model(self.n_constant)
 
+        """
+        - Let: 
+        m = # of states 
+        f = # of features
+
+        - Number of parameters are the amount of variables that HMM has to learn to optimize the model.
+        - Which equals to # of probabilities in transitional matrix + # of emission probabilities + # of starting probabilities
+        - Number of transitional probabilities =  # of cells in the matrix by default (m^2), but since the last column can be inferred from the rest (total probabilities has to be equal to 1), we only need m*(m-1).
+        - Number of emission probabilities = 2*f*m (1 for mean and 1 for variance, assuming a diagonal covariance matrix)
+        - Number of starting probabilities = m-1 (m by default but again, the last one can be inferred)
+
+        => p = m*(m-1) + 2*f*m + (m-1) = m^2 + 2*f*m -1
+        """
+
         # TODO implement model selection based on BIC scores
         # Need to use try catch to avoid this error 
         # https://discussions.udacity.com/t/hmmlearn-valueerror-rows-of-transmat--must-sum-to-1-0/229995
@@ -101,8 +102,8 @@ class SelectorBIC(ModelSelector):
             for num_states in range(self.min_n_components, self.max_n_components+1):
                 current_model = self.base_model(num_states)
                 logL = current_model.score(self.X, self.lengths)
-                logN = np.log(self.num_datapoints)
-                p = num_states**2 + 2*self.num_features*num_states - 1
+                logN = np.log(len(self.X))
+                p = num_states**2 + 2*len(self.X[0])*num_states - 1
                 bic_score = -2*logL + p*logN
                 if (bic_score < best_score):
                     best_score = bic_score
