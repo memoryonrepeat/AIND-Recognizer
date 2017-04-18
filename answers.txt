@@ -1,0 +1,8 @@
+Q1: Custom features
+
+
+Q3: Recognizer
+
+First round, try single features with some random combined features. See that combined features yields much better results, especially those with delta. Therefore in second round try to test with more combined features involving delta. Also SelectorCV yielded clear inferior result compared to BIC and DIC, so in second round ignore that.
+
+Compare between single features, and combined features, and both
