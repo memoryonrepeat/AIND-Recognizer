@@ -1,7 +1,346 @@
+Recognizer Implementation Submission
+For the final project submission, students must implement a recognizer following guidance in the my_recognizer.py module. Experiment with the four feature sets and the three model selection methods (that's 12 possible combinations). You can add and remove cells for experimentation or run the recognizers locally in some other way during your experiments, but retain the results for your discussion. For submission, you will provide code cells of only three interesting combinations for your discussion (see questions below). At least one of these should produce a word error rate of less than 60%, i.e. WER < 0.60 .
+Tip: The hmmlearn library may not be able to train or score all models. Implement try/except contructs as necessary to eliminate non-viable models from consideration.
+In [30]:
+# TODO implement the recognize method in my_recognizer
+from my_recognizer import recognize
+from asl_utils import show_errors
+In [31]:
+# TODO Choose a feature set and model selector
+features = features_norm # change as needed
+model_selector = SelectorBIC # change as needed
+
+# TODO Recognize the test set and display the result with the show_errors method
+models = train_all_words(features, model_selector)
+test_set = asl.build_test(features)
+probabilities, guesses = recognize(models, test_set)
+show_errors(guesses, test_set)
+**** WER = 0.6123595505617978
+Total correct: 69 out of 178
+Video  Recognized                                                    Correct
+=====================================================================================================
+    2: JOHN WRITE *ARRIVE                                            JOHN WRITE HOMEWORK
+    7: *MARY *NEW GO *WHAT                                           JOHN CAN GO CAN
+   12: *MARY *HAVE *GO1 CAN                                          JOHN CAN GO CAN
+   21: *MARY *BOX *HAVE *GO *CAR *CAR *CHICKEN *WRITE                JOHN FISH WONT EAT BUT CAN EAT CHICKEN
+   25: JOHN LIKE *LOVE *LIKE IX                                      JOHN LIKE IX IX IX
+   28: *ANN *ANN *ANN *ANN *ANN                                      JOHN LIKE IX IX IX
+   30: *IX-1P *IX *MARY IX IX                                        JOHN LIKE IX IX IX
+   36: MARY *MARY *YESTERDAY *SHOOT LIKE *IX                         MARY VEGETABLE KNOW IX LIKE CORN1
+   40: *MARY *JOHN *FUTURE1 *VEGETABLE *MARY                         JOHN IX THINK MARY LOVE
+   43: JOHN *FUTURE BUY HOUSE                                        JOHN MUST BUY HOUSE
+   50: *POSS *SEE *WRITE CAR *CAR                                    FUTURE JOHN BUY CAR SHOULD
+   54: JOHN *FUTURE *FUTURE *STUDENT HOUSE                           JOHN SHOULD NOT BUY HOUSE
+   57: *IX *IX *IX MARY                                              JOHN DECIDE VISIT MARY
+   67: *MARY *IX *JOHN *ARRIVE HOUSE                                 JOHN FUTURE NOT BUY HOUSE
+   71: JOHN WILL VISIT MARY                                          JOHN WILL VISIT MARY
+   74: *IX *BILL VISIT MARY                                          JOHN NOT VISIT MARY
+   77: *JOHN BLAME MARY                                              ANN BLAME MARY
+   84: *JOHN *HAVE *VISIT BOOK                                       IX-1P FIND SOMETHING-ONE BOOK
+   89: *FUTURE *THROW *IX *IX IX *ARRIVE *BREAK-DOWN                 JOHN IX GIVE MAN IX NEW COAT
+   90: *SELF *YESTERDAY IX *IX WOMAN *CHOCOLATE                      JOHN GIVE IX SOMETHING-ONE WOMAN BOOK
+   92: JOHN *WOMAN *WOMAN *WOMAN WOMAN BOOK                          JOHN GIVE IX SOMETHING-ONE WOMAN BOOK
+  100: POSS NEW CAR BREAK-DOWN                                       POSS NEW CAR BREAK-DOWN
+  105: JOHN *FUTURE                                                  JOHN LEG
+  107: *MARY POSS *BOX *MARY *TOY1                                   JOHN POSS FRIEND HAVE CANDY
+  108: *IX *HOMEWORK                                                 WOMAN ARRIVE
+  113: IX CAR *IX *JOHN *BOX                                         IX CAR BLUE SUE BUY
+  119: SUE *BUY1 IX CAR *FINISH                                      SUE BUY IX CAR BLUE
+  122: JOHN *GIVE1 BOOK                                              JOHN READ BOOK
+  139: JOHN *BUY1 *CAR YESTERDAY BOOK                                JOHN BUY WHAT YESTERDAY BOOK
+  142: JOHN BUY YESTERDAY WHAT BOOK                                  JOHN BUY YESTERDAY WHAT BOOK
+  158: LOVE *IX WHO                                                  LOVE JOHN WHO
+  167: *MARY IX *SAY-1P LOVE *IX                                     JOHN IX SAY LOVE MARY
+  171: *MARY *IX BLAME                                               JOHN MARY BLAME
+  174: *NEW *GIVE1 GIVE1 *VISIT *CAR                                 PEOPLE GROUP GIVE1 JANA TOY
+  181: JOHN *BOX                                                     JOHN ARRIVE
+  184: *IX BOY *GIVE1 TEACHER APPLE                                  ALL BOY GIVE TEACHER APPLE
+  189: *JANA *MARY *PREFER *ARRIVE                                   JOHN GIVE GIRL BOX
+  193: *IX *YESTERDAY *YESTERDAY BOX                                 JOHN GIVE GIRL BOX
+  199: *JOHN CHOCOLATE *JOHN                                         LIKE CHOCOLATE WHO
+  201: JOHN *GIVE1 *WOMAN *WOMAN *STUDENT HOUSE                      JOHN TELL MARY IX-1P BUY HOUSE
+In [32]:
+# TODO Choose a feature set and model selector
+features = features_norm # change as needed
+model_selector = SelectorDIC # change as needed
+
+# TODO Recognize the test set and display the result with the show_errors method
+models = train_all_words(features, model_selector)
+test_set = asl.build_test(features)
+probabilities, guesses = recognize(models, test_set)
+show_errors(guesses, test_set)
+**** WER = 0.5955056179775281
+Total correct: 72 out of 178
+Video  Recognized                                                    Correct
+=====================================================================================================
+    2: JOHN WRITE *ARRIVE                                            JOHN WRITE HOMEWORK
+    7: *MARY *CAR GO CAN                                             JOHN CAN GO CAN
+   12: JOHN *WHAT *ARRIVE CAN                                        JOHN CAN GO CAN
+   21: *MARY *JOHN *JOHN *BLAME *CAR *CAR *FUTURE CHICKEN            JOHN FISH WONT EAT BUT CAN EAT CHICKEN
+   25: JOHN LIKE IX *LIKE IX                                         JOHN LIKE IX IX IX
+   28: *ANN *ANN IX *MARY IX                                         JOHN LIKE IX IX IX
+   30: *IX-1P *CHOCOLATE *MARY *LOVE *LOVE                           JOHN LIKE IX IX IX
+   36: MARY *MARY *YESTERDAY *SHOOT LIKE *IX                         MARY VEGETABLE KNOW IX LIKE CORN1
+   40: *MARY *JOHN *FUTURE1 *VEGETABLE *MARY                         JOHN IX THINK MARY LOVE
+   43: JOHN *FUTURE BUY HOUSE                                        JOHN MUST BUY HOUSE
+   50: *POSS *SEE *JOHN CAR *IX                                      FUTURE JOHN BUY CAR SHOULD
+   54: JOHN *FUTURE *SHOULD *ARRIVE HOUSE                            JOHN SHOULD NOT BUY HOUSE
+   57: *SHOOT *IX *JOHN *VISIT                                       JOHN DECIDE VISIT MARY
+   67: *MARY *IX *JOHN *ARRIVE HOUSE                                 JOHN FUTURE NOT BUY HOUSE
+   71: JOHN *FUTURE VISIT MARY                                       JOHN WILL VISIT MARY
+   74: *GO *VISIT VISIT MARY                                         JOHN NOT VISIT MARY
+   77: ANN BLAME MARY                                                ANN BLAME MARY
+   84: *JOHN *ARRIVE *VISIT BOOK                                     IX-1P FIND SOMETHING-ONE BOOK
+   89: *MARY *POSS *IX *IX IX *ARRIVE *BREAK-DOWN                    JOHN IX GIVE MAN IX NEW COAT
+   90: *SELF *IX IX *IX WOMAN BOOK                                   JOHN GIVE IX SOMETHING-ONE WOMAN BOOK
+   92: JOHN *IX IX *IX *LOVE BOOK                                    JOHN GIVE IX SOMETHING-ONE WOMAN BOOK
+  100: POSS NEW CAR BREAK-DOWN                                       POSS NEW CAR BREAK-DOWN
+  105: JOHN *POSS                                                    JOHN LEG
+  107: *MARY POSS *BOX *MARY *TOY1                                   JOHN POSS FRIEND HAVE CANDY
+  108: *LOVE *JOHN                                                   WOMAN ARRIVE
+  113: *SHOULD CAR *IX *JOHN *BOX                                    IX CAR BLUE SUE BUY
+  119: SUE *BUY1 IX *JOHN *GO                                        SUE BUY IX CAR BLUE
+  122: JOHN *GIVE1 BOOK                                              JOHN READ BOOK
+  139: JOHN *BUY1 *CAR *JOHN BOOK                                    JOHN BUY WHAT YESTERDAY BOOK
+  142: JOHN BUY YESTERDAY WHAT BOOK                                  JOHN BUY YESTERDAY WHAT BOOK
+  158: LOVE JOHN WHO                                                 LOVE JOHN WHO
+  167: JOHN IX *SAY-1P LOVE *IX                                      JOHN IX SAY LOVE MARY
+  171: *MARY *JOHN BLAME                                             JOHN MARY BLAME
+  174: *CAR *GIVE1 GIVE1 *YESTERDAY *CAR                             PEOPLE GROUP GIVE1 JANA TOY
+  181: JOHN *BOX                                                     JOHN ARRIVE
+  184: *IX BOY *GIVE1 TEACHER APPLE                                  ALL BOY GIVE TEACHER APPLE
+  189: *MARY *MARY *YESTERDAY BOX                                    JOHN GIVE GIRL BOX
+  193: *LEAVE *YESTERDAY *YESTERDAY BOX                              JOHN GIVE GIRL BOX
+  199: *JOHN *ARRIVE *JOHN                                           LIKE CHOCOLATE WHO
+  201: JOHN *GIVE1 *IX *WOMAN *ARRIVE HOUSE                          JOHN TELL MARY IX-1P BUY HOUSE
+In [33]:
+# TODO Choose a feature set and model selector
+features = features_norm # change as needed
+model_selector = SelectorCV # change as needed
+
+# TODO Recognize the test set and display the result with the show_errors method
+models = train_all_words(features, model_selector)
+test_set = asl.build_test(features)
+probabilities, guesses = recognize(models, test_set)
+show_errors(guesses, test_set)
+**** WER = 0.6235955056179775
+Total correct: 67 out of 178
+Video  Recognized                                                    Correct
+=====================================================================================================
+    2: *MARY WRITE *ARRIVE                                           JOHN WRITE HOMEWORK
+    7: JOHN *NEW *JOHN CAN                                           JOHN CAN GO CAN
+   12: *SHOULD *HAVE *GO1 CAN                                        JOHN CAN GO CAN
+   21: *LIKE *NEW *HAVE *IX-1P *CAR *BLAME *CHICKEN *WRITE           JOHN FISH WONT EAT BUT CAN EAT CHICKEN
+   25: *IX LIKE *LIKE *LIKE IX                                       JOHN LIKE IX IX IX
+   28: *ANN LIKE *ANN *LIKE *ANN                                     JOHN LIKE IX IX IX
+   30: *SHOOT LIKE *LOVE *LIKE *MARY                                 JOHN LIKE IX IX IX
+   36: *LEAVE *NOT *YESTERDAY *VISIT LIKE *JOHN                      MARY VEGETABLE KNOW IX LIKE CORN1
+   40: JOHN *LEAVE *FUTURE1 *VEGETABLE LOVE                          JOHN IX THINK MARY LOVE
+   43: JOHN *SHOULD BUY HOUSE                                        JOHN MUST BUY HOUSE
+   50: *FRANK *SEE *ARRIVE CAR *CAR                                  FUTURE JOHN BUY CAR SHOULD
+   54: JOHN SHOULD *FUTURE *STUDENT HOUSE                            JOHN SHOULD NOT BUY HOUSE
+   57: *MARY *MARY *MARY MARY                                        JOHN DECIDE VISIT MARY
+   67: *IX-1P FUTURE *JOHN *ARRIVE HOUSE                             JOHN FUTURE NOT BUY HOUSE
+   71: JOHN WILL VISIT MARY                                          JOHN WILL VISIT MARY
+   74: *WOMAN *VISIT VISIT *FRANK                                    JOHN NOT VISIT MARY
+   77: *IX BLAME MARY                                                ANN BLAME MARY
+   84: *IX *ARRIVE *NEW BOOK                                         IX-1P FIND SOMETHING-ONE BOOK
+   89: *FUTURE *THROW *JOHN *JOHN *WOMAN *BOOK *BREAK-DOWN           JOHN IX GIVE MAN IX NEW COAT
+   90: *SELF *GIVE1 IX *IX WOMAN *CHOCOLATE                          JOHN GIVE IX SOMETHING-ONE WOMAN BOOK
+   92: JOHN *GIVE1 IX *IX WOMAN BOOK                                 JOHN GIVE IX SOMETHING-ONE WOMAN BOOK
+  100: POSS NEW CAR BREAK-DOWN                                       POSS NEW CAR BREAK-DOWN
+  105: *WHO *SEE                                                     JOHN LEG
+  107: *TELL *IX *BOX *LIKE *JANA                                    JOHN POSS FRIEND HAVE CANDY
+  108: *LOVE *HOMEWORK                                               WOMAN ARRIVE
+  113: IX CAR *IX SUE *HAVE                                          IX CAR BLUE SUE BUY
+  119: *VEGETABLE *BUY1 IX CAR *GO                                   SUE BUY IX CAR BLUE
+  122: JOHN *HOUSE *COAT                                             JOHN READ BOOK
+  139: JOHN *BUY1 *CAR YESTERDAY BOOK                                JOHN BUY WHAT YESTERDAY BOOK
+  142: JOHN BUY YESTERDAY WHAT BOOK                                  JOHN BUY YESTERDAY WHAT BOOK
+  158: LOVE *MARY *CORN                                              LOVE JOHN WHO
+  167: JOHN *JOHN *SAY-1P LOVE MARY                                  JOHN IX SAY LOVE MARY
+  171: *SHOOT *JOHN BLAME                                            JOHN MARY BLAME
+  174: *NEW *GIVE1 GIVE1 *WHO *CAR                                   PEOPLE GROUP GIVE1 JANA TOY
+  181: JOHN *BOX                                                     JOHN ARRIVE
+  184: *IX *IX *GIVE1 TEACHER APPLE                                  ALL BOY GIVE TEACHER APPLE
+  189: *JANA *SEE *PREFER *ARRIVE                                    JOHN GIVE GIRL BOX
+  193: JOHN *SEE *YESTERDAY BOX                                      JOHN GIVE GIRL BOX
+  199: *JOHN CHOCOLATE *JOHN                                         LIKE CHOCOLATE WHO
+  201: JOHN *THINK *WOMAN *WOMAN *STUDENT HOUSE                      JOHN TELL MARY IX-1P BUY HOUSE
+In [34]:
+# TODO Choose a feature set and model selector
+features = features_polar # change as needed
+model_selector = SelectorBIC # change as needed
+
+# TODO Recognize the test set and display the result with the show_errors method
+models = train_all_words(features, model_selector)
+test_set = asl.build_test(features)
+probabilities, guesses = recognize(models, test_set)
+show_errors(guesses, test_set)
+**** WER = 0.5449438202247191
+Total correct: 81 out of 178
+Video  Recognized                                                    Correct
+=====================================================================================================
+    2: *GO WRITE *NEW                                                JOHN WRITE HOMEWORK
+    7: JOHN *PEOPLE GO *ARRIVE                                       JOHN CAN GO CAN
+   12: JOHN *WHAT *GO1 CAN                                           JOHN CAN GO CAN
+   21: JOHN *NEW WONT *NOT *GIVE1 *TEACHER *FUTURE *WHO              JOHN FISH WONT EAT BUT CAN EAT CHICKEN
+   25: JOHN LIKE *LOVE *WHO IX                                       JOHN LIKE IX IX IX
+   28: JOHN *WHO *FUTURE *WHO IX                                     JOHN LIKE IX IX IX
+   30: JOHN LIKE *MARY *MARY *MARY                                   JOHN LIKE IX IX IX
+   36: *VISIT VEGETABLE *GIRL *GIVE *MARY *MARY                      MARY VEGETABLE KNOW IX LIKE CORN1
+   40: JOHN *VISIT *FUTURE1 *JOHN *MARY                              JOHN IX THINK MARY LOVE
+   43: JOHN *FUTURE BUY HOUSE                                        JOHN MUST BUY HOUSE
+   50: *JOHN *SEE *STUDENT CAR *JOHN                                 FUTURE JOHN BUY CAR SHOULD
+   54: JOHN SHOULD *WHO BUY HOUSE                                    JOHN SHOULD NOT BUY HOUSE
+   57: *MARY *VISIT VISIT MARY                                       JOHN DECIDE VISIT MARY
+   67: *SHOULD FUTURE *MARY BUY HOUSE                                JOHN FUTURE NOT BUY HOUSE
+   71: JOHN *FINISH *GIVE1 MARY                                      JOHN WILL VISIT MARY
+   74: *IX *VISIT *GIVE MARY                                         JOHN NOT VISIT MARY
+   77: *JOHN BLAME *LOVE                                             ANN BLAME MARY
+   84: *HOMEWORK *GIVE1 *GIVE1 BOOK                                  IX-1P FIND SOMETHING-ONE BOOK
+   89: *GIVE *GIVE *WOMAN *WOMAN IX *ARRIVE *BREAK-DOWN              JOHN IX GIVE MAN IX NEW COAT
+   90: JOHN *HAVE IX SOMETHING-ONE *VISIT *BREAK-DOWN                JOHN GIVE IX SOMETHING-ONE WOMAN BOOK
+   92: JOHN *WOMAN IX *WOMAN WOMAN BOOK                              JOHN GIVE IX SOMETHING-ONE WOMAN BOOK
+  100: POSS NEW CAR BREAK-DOWN                                       POSS NEW CAR BREAK-DOWN
+  105: JOHN *VEGETABLE                                               JOHN LEG
+  107: JOHN *IX *HAVE *GO *JANA                                      JOHN POSS FRIEND HAVE CANDY
+  108: *JOHN *HOMEWORK                                               WOMAN ARRIVE
+  113: IX CAR *IX *IX *BUY1                                          IX CAR BLUE SUE BUY
+  119: *PREFER *BUY1 *CAR CAR *GO                                    SUE BUY IX CAR BLUE
+  122: JOHN *GIVE1 BOOK                                              JOHN READ BOOK
+  139: JOHN *BUY1 WHAT *BLAME *CHOCOLATE                             JOHN BUY WHAT YESTERDAY BOOK
+  142: JOHN BUY YESTERDAY WHAT BOOK                                  JOHN BUY YESTERDAY WHAT BOOK
+  158: LOVE JOHN WHO                                                 LOVE JOHN WHO
+  167: JOHN IX *VISIT LOVE MARY                                      JOHN IX SAY LOVE MARY
+  171: JOHN *IX BLAME                                                JOHN MARY BLAME
+  174: *JOHN *GIVE3 GIVE1 *YESTERDAY *JOHN                           PEOPLE GROUP GIVE1 JANA TOY
+  181: *EAT ARRIVE                                                   JOHN ARRIVE
+  184: ALL BOY *GIVE1 TEACHER APPLE                                  ALL BOY GIVE TEACHER APPLE
+  189: *MARY *VISIT *VISIT BOX                                       JOHN GIVE GIRL BOX
+  193: JOHN *POSS *VISIT BOX                                         JOHN GIVE GIRL BOX
+  199: *HOMEWORK *VIDEOTAPE *JOHN                                    LIKE CHOCOLATE WHO
+  201: JOHN *MAN *MAN *LIKE BUY HOUSE                                JOHN TELL MARY IX-1P BUY HOUSE
+In [35]:
+# TODO Choose a feature set and model selector
+features = features_polar # change as needed
+model_selector = SelectorDIC # change as needed
+
+# TODO Recognize the test set and display the result with the show_errors method
+models = train_all_words(features, model_selector)
+test_set = asl.build_test(features)
+probabilities, guesses = recognize(models, test_set)
+show_errors(guesses, test_set)
+**** WER = 0.5449438202247191
+Total correct: 81 out of 178
+Video  Recognized                                                    Correct
+=====================================================================================================
+    2: JOHN *NEW *GIVE1                                              JOHN WRITE HOMEWORK
+    7: JOHN CAN GO CAN                                               JOHN CAN GO CAN
+   12: JOHN *WHAT *JOHN CAN                                          JOHN CAN GO CAN
+   21: JOHN *NEW *JOHN *PREFER *GIVE1 *WHAT *FUTURE *WHO             JOHN FISH WONT EAT BUT CAN EAT CHICKEN
+   25: JOHN *IX IX *WHO IX                                           JOHN LIKE IX IX IX
+   28: JOHN *FUTURE IX *FUTURE *LOVE                                 JOHN LIKE IX IX IX
+   30: JOHN LIKE *MARY *MARY *MARY                                   JOHN LIKE IX IX IX
+   36: *IX *VISIT *GIVE *GIVE *MARY *MARY                            MARY VEGETABLE KNOW IX LIKE CORN1
+   40: JOHN *GO *GIVE *JOHN *MARY                                    JOHN IX THINK MARY LOVE
+   43: JOHN *IX BUY HOUSE                                            JOHN MUST BUY HOUSE
+   50: *JOHN *SEE BUY CAR *JOHN                                      FUTURE JOHN BUY CAR SHOULD
+   54: JOHN SHOULD NOT BUY HOUSE                                     JOHN SHOULD NOT BUY HOUSE
+   57: *MARY *GO *GO MARY                                            JOHN DECIDE VISIT MARY
+   67: *SHOULD FUTURE *MARY BUY HOUSE                                JOHN FUTURE NOT BUY HOUSE
+   71: JOHN *FUTURE *GIVE1 MARY                                      JOHN WILL VISIT MARY
+   74: *IX *GO *GO *VISIT                                            JOHN NOT VISIT MARY
+   77: *JOHN *GIVE1 MARY                                             ANN BLAME MARY
+   84: *HOMEWORK *GIVE1 *GIVE1 *COAT                                 IX-1P FIND SOMETHING-ONE BOOK
+   89: *GIVE *GIVE *WOMAN *WOMAN IX *ARRIVE *BOOK                    JOHN IX GIVE MAN IX NEW COAT
+   90: JOHN GIVE IX SOMETHING-ONE WOMAN *ARRIVE                      JOHN GIVE IX SOMETHING-ONE WOMAN BOOK
+   92: JOHN *WOMAN IX *WOMAN WOMAN BOOK                              JOHN GIVE IX SOMETHING-ONE WOMAN BOOK
+  100: POSS NEW CAR BREAK-DOWN                                       POSS NEW CAR BREAK-DOWN
+  105: JOHN *SEE                                                     JOHN LEG
+  107: JOHN POSS *HAVE HAVE *MARY                                    JOHN POSS FRIEND HAVE CANDY
+  108: *LOVE *LOVE                                                   WOMAN ARRIVE
+  113: IX CAR *IX *MARY *JOHN                                        IX CAR BLUE SUE BUY
+  119: *MARY *BUY1 IX *BLAME *IX                                     SUE BUY IX CAR BLUE
+  122: JOHN *GIVE1 BOOK                                              JOHN READ BOOK
+  139: JOHN *ARRIVE WHAT *MARY *ARRIVE                               JOHN BUY WHAT YESTERDAY BOOK
+  142: JOHN BUY YESTERDAY WHAT BOOK                                  JOHN BUY YESTERDAY WHAT BOOK
+  158: LOVE JOHN WHO                                                 LOVE JOHN WHO
+  167: JOHN *MARY *VISIT LOVE MARY                                   JOHN IX SAY LOVE MARY
+  171: *IX MARY BLAME                                                JOHN MARY BLAME
+  174: *JOHN *JOHN GIVE1 *YESTERDAY *JOHN                            PEOPLE GROUP GIVE1 JANA TOY
+  181: *EAT ARRIVE                                                   JOHN ARRIVE
+  184: *GO BOY *GIVE1 TEACHER *YESTERDAY                             ALL BOY GIVE TEACHER APPLE
+  189: *MARY *GO *YESTERDAY BOX                                      JOHN GIVE GIRL BOX
+  193: JOHN *GO *YESTERDAY BOX                                       JOHN GIVE GIRL BOX
+  199: *JOHN *STUDENT *GO                                            LIKE CHOCOLATE WHO
+  201: JOHN *MAN *LOVE *JOHN BUY HOUSE                               JOHN TELL MARY IX-1P BUY HOUSE
+In [36]:
+# TODO Choose a feature set and model selector
+features = features_polar # change as needed
+model_selector = SelectorCV # change as needed
+
+# TODO Recognize the test set and display the result with the show_errors method
+models = train_all_words(features, model_selector)
+test_set = asl.build_test(features)
+probabilities, guesses = recognize(models, test_set)
+show_errors(guesses, test_set)
+**** WER = 0.6179775280898876
+Total correct: 68 out of 178
+Video  Recognized                                                    Correct
+=====================================================================================================
+    2: *GO WRITE HOMEWORK                                            JOHN WRITE HOMEWORK
+    7: JOHN *WHAT *MARY *WHAT                                        JOHN CAN GO CAN
+   12: JOHN *WHAT *GO1 CAN                                           JOHN CAN GO CAN
+   21: *IX *HOMEWORK WONT *FUTURE *CAR *CAR *GO *TOMORROW            JOHN FISH WONT EAT BUT CAN EAT CHICKEN
+   25: *FRANK LIKE IX *WHO IX                                        JOHN LIKE IX IX IX
+   28: *IX *WHO *FUTURE *FUTURE IX                                   JOHN LIKE IX IX IX
+   30: *SHOULD LIKE *GO *MARY *GO                                    JOHN LIKE IX IX IX
+   36: *SOMETHING-ONE VEGETABLE *GIRL *GIVE *MARY *MARY              MARY VEGETABLE KNOW IX LIKE CORN1
+   40: *SUE *GIVE *DECIDE MARY *GO                                   JOHN IX THINK MARY LOVE
+   43: *IX *GO BUY HOUSE                                             JOHN MUST BUY HOUSE
+   50: *POSS *SEE BUY CAR *ARRIVE                                    FUTURE JOHN BUY CAR SHOULD
+   54: JOHN SHOULD *WHO BUY HOUSE                                    JOHN SHOULD NOT BUY HOUSE
+   57: *MARY *PREFER *MARY MARY                                      JOHN DECIDE VISIT MARY
+   67: *LIKE *MOTHER NOT BUY HOUSE                                   JOHN FUTURE NOT BUY HOUSE
+   71: JOHN *FINISH *GIVE1 MARY                                      JOHN WILL VISIT MARY
+   74: *GO *WHO *GO *GO                                              JOHN NOT VISIT MARY
+   77: *IX BLAME *LOVE                                               ANN BLAME MARY
+   84: *HOMEWORK *GIVE1 *POSS BOOK                                   IX-1P FIND SOMETHING-ONE BOOK
+   89: *MAN *GIVE *WOMAN *IX IX *BUY *BOOK                           JOHN IX GIVE MAN IX NEW COAT
+   90: JOHN *GIVE1 IX *GIVE3 *GIVE1 *COAT                            JOHN GIVE IX SOMETHING-ONE WOMAN BOOK
+   92: JOHN *WOMAN *WOMAN *WOMAN WOMAN BOOK                          JOHN GIVE IX SOMETHING-ONE WOMAN BOOK
+  100: POSS NEW CAR BREAK-DOWN                                       POSS NEW CAR BREAK-DOWN
+  105: *FRANK *VEGETABLE                                             JOHN LEG
+  107: *LIKE *SOMETHING-ONE *HAVE *GO *WHO                           JOHN POSS FRIEND HAVE CANDY
+  108: *IX ARRIVE                                                    WOMAN ARRIVE
+  113: IX CAR *SUE *SOMETHING-ONE *ARRIVE                            IX CAR BLUE SUE BUY
+  119: *PREFER *BUY1 IX CAR *SOMETHING-ONE                           SUE BUY IX CAR BLUE
+  122: JOHN *GIVE1 BOOK                                              JOHN READ BOOK
+  139: *SHOULD *BUY1 *CAR YESTERDAY BOOK                             JOHN BUY WHAT YESTERDAY BOOK
+  142: *FRANK BUY YESTERDAY WHAT BOOK                                JOHN BUY YESTERDAY WHAT BOOK
+  158: LOVE *MARY WHO                                                LOVE JOHN WHO
+  167: *MARY *SOMETHING-ONE *MARY LOVE *LOVE                         JOHN IX SAY LOVE MARY
+  171: *SOMETHING-ONE *SOMETHING-ONE BLAME                           JOHN MARY BLAME
+  174: *CAN *GIVE3 GIVE1 *GO *WHAT                                   PEOPLE GROUP GIVE1 JANA TOY
+  181: *SUE ARRIVE                                                   JOHN ARRIVE
+  184: *IX BOY *GIVE1 TEACHER APPLE                                  ALL BOY GIVE TEACHER APPLE
+  189: *SUE *SOMETHING-ONE *YESTERDAY *ARRIVE                        JOHN GIVE GIRL BOX
+  193: JOHN *SOMETHING-ONE *YESTERDAY BOX                            JOHN GIVE GIRL BOX
+  199: *HOMEWORK CHOCOLATE WHO                                       LIKE CHOCOLATE WHO
+  201: JOHN *MAN *MAN *JOHN BUY HOUSE                                JOHN TELL MARY IX-1P BUY HOUSE
+In [37]:
+# TODO Choose a feature set and model selector
+features = features_delta # change as needed
+model_selector = SelectorBIC # change as needed
+
+# TODO Recognize the test set and display the result with the show_errors method
+models = train_all_words(features, model_selector)
+test_set = asl.build_test(features)
+probabilities, guesses = recognize(models, test_set)
+show_errors(guesses, test_set)
 **** WER = 0.601123595505618
 Total correct: 71 out of 178
-features = features_delta
-model_selector = SelectorBIC
 Video  Recognized                                                    Correct
 =====================================================================================================
     2: JOHN *IX HOMEWORK                                             JOHN WRITE HOMEWORK
@@ -44,3 +383,1423 @@ Video  Recognized                                                    Correct
   193: JOHN *IX *HAVE BOX                                            JOHN GIVE GIRL BOX
   199: *JOHN *JOHN *MARY                                             LIKE CHOCOLATE WHO
   201: JOHN *MARY MARY *POSS BUY HOUSE                               JOHN TELL MARY IX-1P BUY HOUSE
+In [38]:
+# TODO Choose a feature set and model selector
+features = features_delta # change as needed
+model_selector = SelectorDIC # change as needed
+
+# TODO Recognize the test set and display the result with the show_errors method
+models = train_all_words(features, model_selector)
+test_set = asl.build_test(features)
+probabilities, guesses = recognize(models, test_set)
+show_errors(guesses, test_set)
+**** WER = 0.6235955056179775
+Total correct: 67 out of 178
+Video  Recognized                                                    Correct
+=====================================================================================================
+    2: JOHN *JOHN *ARRIVE                                            JOHN WRITE HOMEWORK
+    7: JOHN *BOX *GIVE1 *ARRIVE                                      JOHN CAN GO CAN
+   12: JOHN *BOX *FUTURE CAN                                         JOHN CAN GO CAN
+   21: *MARY *MARY *GIVE1 *MARY *WHAT *IX *MARY *MARY                JOHN FISH WONT EAT BUT CAN EAT CHICKEN
+   25: JOHN *WOMAN *MARY *JOHN IX                                    JOHN LIKE IX IX IX
+   28: JOHN *MARY IX IX *WOMAN                                       JOHN LIKE IX IX IX
+   30: JOHN *MARY *SOMETHING-ONE IX IX                               JOHN LIKE IX IX IX
+   36: *JOHN *JOHN *IX *NEW-YORK *VISIT *MARY                        MARY VEGETABLE KNOW IX LIKE CORN1
+   40: JOHN IX *JOHN *JOHN *MARY                                     JOHN IX THINK MARY LOVE
+   43: JOHN *IX *CAR HOUSE                                           JOHN MUST BUY HOUSE
+   50: *JOHN *MARY BUY CAR *MARY                                     FUTURE JOHN BUY CAR SHOULD
+   54: JOHN *JOHN *JOHN BUY HOUSE                                    JOHN SHOULD NOT BUY HOUSE
+   57: *IX *JOHN *IX *IX                                             JOHN DECIDE VISIT MARY
+   67: JOHN *JOHN *BOOK BUY HOUSE                                    JOHN FUTURE NOT BUY HOUSE
+   71: JOHN *CAR VISIT MARY                                          JOHN WILL VISIT MARY
+   74: JOHN *JOHN *IX MARY                                           JOHN NOT VISIT MARY
+   77: *JOHN *ARRIVE MARY                                            ANN BLAME MARY
+   84: *JOHN *JOHN *IX *MARY                                         IX-1P FIND SOMETHING-ONE BOOK
+   89: *ARRIVE *JOHN GIVE *IX IX NEW *HOUSE                          JOHN IX GIVE MAN IX NEW COAT
+   90: JOHN *JOHN IX *IX *IX *JOHN                                   JOHN GIVE IX SOMETHING-ONE WOMAN BOOK
+   92: JOHN *IX IX *JOHN *JOHN *MARY                                 JOHN GIVE IX SOMETHING-ONE WOMAN BOOK
+  100: *JOHN *BUY1 CAR *HOUSE                                        POSS NEW CAR BREAK-DOWN
+  105: JOHN *MARY                                                    JOHN LEG
+  107: JOHN *JOHN *VISIT *JOHN *MARY                                 JOHN POSS FRIEND HAVE CANDY
+  108: *IX *BOOK                                                     WOMAN ARRIVE
+  113: *JOHN CAR *MARY *JOHN *GIVE1                                  IX CAR BLUE SUE BUY
+  119: *JOHN *BUY1 IX CAR *MARY                                      SUE BUY IX CAR BLUE
+  122: JOHN *HAVE *MARY                                              JOHN READ BOOK
+  139: JOHN *ARRIVE WHAT *IX *CAR                                    JOHN BUY WHAT YESTERDAY BOOK
+  142: JOHN BUY *IX *IX *MARY                                        JOHN BUY YESTERDAY WHAT BOOK
+  158: LOVE *MARY WHO                                                LOVE JOHN WHO
+  167: JOHN IX *IX *ARRIVE MARY                                      JOHN IX SAY LOVE MARY
+  171: JOHN MARY BLAME                                               JOHN MARY BLAME
+  174: *ARRIVE *JOHN GIVE1 *JOHN *CAR                                PEOPLE GROUP GIVE1 JANA TOY
+  181: JOHN ARRIVE                                                   JOHN ARRIVE
+  184: ALL *JOHN *GIVE1 TEACHER *MARY                                ALL BOY GIVE TEACHER APPLE
+  189: JOHN *IX *ARRIVE *WHAT                                        JOHN GIVE GIRL BOX
+  193: *IX *IX *LOVE BOX                                             JOHN GIVE GIRL BOX
+  199: *JOHN *IX *MARY                                               LIKE CHOCOLATE WHO
+  201: JOHN *MARY MARY *JOHN BUY HOUSE                               JOHN TELL MARY IX-1P BUY HOUSE
+In [39]:
+# TODO Choose a feature set and model selector
+features = features_delta # change as needed
+model_selector = SelectorCV # change as needed
+
+# TODO Recognize the test set and display the result with the show_errors method
+models = train_all_words(features, model_selector)
+test_set = asl.build_test(features)
+probabilities, guesses = recognize(models, test_set)
+show_errors(guesses, test_set)
+**** WER = 0.6292134831460674
+Total correct: 66 out of 178
+Video  Recognized                                                    Correct
+=====================================================================================================
+    2: JOHN *IX HOMEWORK                                             JOHN WRITE HOMEWORK
+    7: JOHN *HAVE *GIVE1 *TEACHER                                    JOHN CAN GO CAN
+   12: JOHN CAN *GO1 CAN                                             JOHN CAN GO CAN
+   21: *MARY *MARY WONT *MARY *CAR *GO *SHOULD *MARY                 JOHN FISH WONT EAT BUT CAN EAT CHICKEN
+   25: JOHN *IX IX *JOHN *MARY                                       JOHN LIKE IX IX IX
+   28: JOHN *MARY *MARY IX IX                                        JOHN LIKE IX IX IX
+   30: JOHN *MARY *NOT IX IX                                         JOHN LIKE IX IX IX
+   36: MARY *FUTURE *JOHN *NOT *GIVE3 *MARY                          MARY VEGETABLE KNOW IX LIKE CORN1
+   40: *MARY IX *WHO *SEE *APPLE                                     JOHN IX THINK MARY LOVE
+   43: JOHN *IX *FINISH HOUSE                                        JOHN MUST BUY HOUSE
+   50: *JOHN *NOT BUY CAR *MARY                                      FUTURE JOHN BUY CAR SHOULD
+   54: JOHN *VEGETABLE *MARY BUY HOUSE                               JOHN SHOULD NOT BUY HOUSE
+   57: JOHN *JOHN *IX *IX                                            JOHN DECIDE VISIT MARY
+   67: JOHN *JOHN *PEOPLE BUY HOUSE                                  JOHN FUTURE NOT BUY HOUSE
+   71: JOHN *JOHN VISIT *CAR                                         JOHN WILL VISIT MARY
+   74: JOHN *JOHN *IX *JOHN                                          JOHN NOT VISIT MARY
+   77: *JOHN BLAME MARY                                              ANN BLAME MARY
+   84: *JOHN *GO *IX *WHAT                                           IX-1P FIND SOMETHING-ONE BOOK
+   89: *GIVE1 *JOHN *IX *IX IX NEW *HOUSE                            JOHN IX GIVE MAN IX NEW COAT
+   90: *MARY *IX *JOHN *IX WOMAN *MARY                               JOHN GIVE IX SOMETHING-ONE WOMAN BOOK
+   92: JOHN *MARY *JOHN *JOHN WOMAN *ARRIVE                          JOHN GIVE IX SOMETHING-ONE WOMAN BOOK
+  100: *JOHN NEW *WHAT BREAK-DOWN                                    POSS NEW CAR BREAK-DOWN
+  105: JOHN *MARY                                                    JOHN LEG
+  107: JOHN *GIVE1 *STUDENT HAVE *MARY                               JOHN POSS FRIEND HAVE CANDY
+  108: *JOHN ARRIVE                                                  WOMAN ARRIVE
+  113: IX CAR *MARY *IX *GIVE1                                       IX CAR BLUE SUE BUY
+  119: *MARY *BUY1 *GIVE1 CAR *HAVE                                  SUE BUY IX CAR BLUE
+  122: JOHN *HAVE *FUTURE                                            JOHN READ BOOK
+  139: JOHN *GIVE1 WHAT *WHO *ARRIVE                                 JOHN BUY WHAT YESTERDAY BOOK
+  142: JOHN BUY *MARY *MARY *EAT                                     JOHN BUY YESTERDAY WHAT BOOK
+  158: LOVE *WHO *MARY                                               LOVE JOHN WHO
+  167: *IX *WHO *IX LOVE *BOOK                                       JOHN IX SAY LOVE MARY
+  171: JOHN MARY BLAME                                               JOHN MARY BLAME
+  174: *GIVE1 *MARY GIVE1 *MARY *FINISH                              PEOPLE GROUP GIVE1 JANA TOY
+  181: JOHN *GIVE1                                                   JOHN ARRIVE
+  184: ALL BOY *GIVE1 TEACHER *MARY                                  ALL BOY GIVE TEACHER APPLE
+  189: JOHN *IX *WHAT *GIVE1                                         JOHN GIVE GIRL BOX
+  193: *IX *IX *HOUSE BOX                                            JOHN GIVE GIRL BOX
+  199: *JOHN *MARY *MARY                                             LIKE CHOCOLATE WHO
+  201: JOHN *MARY *WHO *POSS *VISIT HOUSE                            JOHN TELL MARY IX-1P BUY HOUSE
+In [40]:
+# TODO Choose a feature set and model selector
+features = features_minmax_norm # change as needed
+model_selector = SelectorBIC # change as needed
+
+# TODO Recognize the test set and display the result with the show_errors method
+models = train_all_words(features, model_selector)
+test_set = asl.build_test(features)
+probabilities, guesses = recognize(models, test_set)
+show_errors(guesses, test_set)
+**** WER = 0.5842696629213483
+Total correct: 74 out of 178
+Video  Recognized                                                    Correct
+=====================================================================================================
+    2: *POSS WRITE HOMEWORK                                          JOHN WRITE HOMEWORK
+    7: JOHN *PEOPLE *MARY *TOY                                       JOHN CAN GO CAN
+   12: *CAR *WHAT *GO1 CAN                                           JOHN CAN GO CAN
+   21: *ANN FISH *HOMEWORK *ANN *BLAME *BLAME *CHICKEN *EAT          JOHN FISH WONT EAT BUT CAN EAT CHICKEN
+   25: *ANN LIKE *ANN *LIKE *ANN                                     JOHN LIKE IX IX IX
+   28: *ANN LIKE *ANN *LIKE *ANN                                     JOHN LIKE IX IX IX
+   30: *IX LIKE *MARY *LIKE IX                                       JOHN LIKE IX IX IX
+   36: MARY *JOHN *GIVE1 *VISIT *FRANK *IX                           MARY VEGETABLE KNOW IX LIKE CORN1
+   40: JOHN *FRANK *SELF *VEGETABLE *MARY                            JOHN IX THINK MARY LOVE
+   43: JOHN *FUTURE BUY HOUSE                                        JOHN MUST BUY HOUSE
+   50: *JOHN *FRANK *WRITE CAR SHOULD                                FUTURE JOHN BUY CAR SHOULD
+   54: JOHN SHOULD *FUTURE BUY HOUSE                                 JOHN SHOULD NOT BUY HOUSE
+   57: *IX *MARY *LEAVE *FRANK                                       JOHN DECIDE VISIT MARY
+   67: JOHN FUTURE *FUTURE *STUDENT HOUSE                            JOHN FUTURE NOT BUY HOUSE
+   71: JOHN WILL VISIT MARY                                          JOHN WILL VISIT MARY
+   74: *IX *WHO *MARY MARY                                           JOHN NOT VISIT MARY
+   77: ANN BLAME MARY                                                ANN BLAME MARY
+   84: *HOMEWORK *STUDENT *HOMEWORK BOOK                             IX-1P FIND SOMETHING-ONE BOOK
+   89: *THINK *WILL *GIVE2 *BILL *SOMETHING-ONE *BLAME COAT          JOHN IX GIVE MAN IX NEW COAT
+   90: JOHN *IX IX *IX *CORN BOOK                                    JOHN GIVE IX SOMETHING-ONE WOMAN BOOK
+   92: JOHN *WILL *SOMETHING-ONE SOMETHING-ONE *OLD BOOK             JOHN GIVE IX SOMETHING-ONE WOMAN BOOK
+  100: POSS NEW CAR BREAK-DOWN                                       POSS NEW CAR BREAK-DOWN
+  105: JOHN *SEE                                                     JOHN LEG
+  107: *MARY *SOMETHING-ONE FRIEND *MARY *JOHN                       JOHN POSS FRIEND HAVE CANDY
+  108: *OLD *BUY1                                                    WOMAN ARRIVE
+  113: *SHOOT CAR BLUE SUE *BUY1                                     IX CAR BLUE SUE BUY
+  119: *VEGETABLE *BUY1 IX *JOHN *POSS                               SUE BUY IX CAR BLUE
+  122: JOHN READ *COAT                                               JOHN READ BOOK
+  139: JOHN *BUY1 *TOY YESTERDAY BOOK                                JOHN BUY WHAT YESTERDAY BOOK
+  142: JOHN *STUDENT YESTERDAY WHAT BOOK                             JOHN BUY YESTERDAY WHAT BOOK
+  158: LOVE *MARY WHO                                                LOVE JOHN WHO
+  167: *MARY *MARY *MARY LOVE *PUTASIDE                              JOHN IX SAY LOVE MARY
+  171: *MARY *TOY1 BLAME                                             JOHN MARY BLAME
+  174: *NEW GROUP GIVE1 *CORN TOY                                    PEOPLE GROUP GIVE1 JANA TOY
+  181: *SUE ARRIVE                                                   JOHN ARRIVE
+  184: *THROW BOY *GIVE1 TEACHER APPLE                               ALL BOY GIVE TEACHER APPLE
+  189: *JANA *SELF *CORN *LIVE                                       JOHN GIVE GIRL BOX
+  193: *IX *SELF *CORN BOX                                           JOHN GIVE GIRL BOX
+  199: *HOMEWORK CHOCOLATE *JOHN                                     LIKE CHOCOLATE WHO
+  201: JOHN *THINK *OLD *LIKE BUY HOUSE                              JOHN TELL MARY IX-1P BUY HOUSE
+In [41]:
+# TODO Choose a feature set and model selector
+features = features_minmax_norm # change as needed
+model_selector = SelectorDIC # change as needed
+
+# TODO Recognize the test set and display the result with the show_errors method
+models = train_all_words(features, model_selector)
+test_set = asl.build_test(features)
+probabilities, guesses = recognize(models, test_set)
+show_errors(guesses, test_set)
+**** WER = 0.5561797752808989
+Total correct: 79 out of 178
+Video  Recognized                                                    Correct
+=====================================================================================================
+    2: *FUTURE WRITE HOMEWORK                                        JOHN WRITE HOMEWORK
+    7: JOHN *BUY GO *TOY                                             JOHN CAN GO CAN
+   12: JOHN CAN *GO1 *HOUSE                                          JOHN CAN GO CAN
+   21: *ANN FISH *HOMEWORK *ANN BUT *GIVE3 *CHICKEN *EAT             JOHN FISH WONT EAT BUT CAN EAT CHICKEN
+   25: *ANN LIKE *ANN *LIKE *ANN                                     JOHN LIKE IX IX IX
+   28: *ANN LIKE *ANN *LIKE *ANN                                     JOHN LIKE IX IX IX
+   30: *IX LIKE *MARY *LIKE IX                                       JOHN LIKE IX IX IX
+   36: MARY *JOHN *GIVE1 *VISIT *FRANK *IX                           MARY VEGETABLE KNOW IX LIKE CORN1
+   40: JOHN *FRANK *SELF *VEGETABLE *MARY                            JOHN IX THINK MARY LOVE
+   43: JOHN *JOHN BUY HOUSE                                          JOHN MUST BUY HOUSE
+   50: *POSS *SEE *STUDENT CAR SHOULD                                FUTURE JOHN BUY CAR SHOULD
+   54: JOHN *FUTURE *WILL BUY HOUSE                                  JOHN SHOULD NOT BUY HOUSE
+   57: *IX *MARY VISIT *VISIT                                        JOHN DECIDE VISIT MARY
+   67: JOHN FUTURE *FUTURE BUY HOUSE                                 JOHN FUTURE NOT BUY HOUSE
+   71: JOHN WILL VISIT MARY                                          JOHN WILL VISIT MARY
+   74: *IX *WHO VISIT MARY                                           JOHN NOT VISIT MARY
+   77: ANN BLAME MARY                                                ANN BLAME MARY
+   84: *JOHN *STUDENT *ARRIVE BOOK                                   IX-1P FIND SOMETHING-ONE BOOK
+   89: *THINK *THROW *THROW *THROW *OLD *BLAME COAT                  JOHN IX GIVE MAN IX NEW COAT
+   90: JOHN *IX IX *IX *CORN BOOK                                    JOHN GIVE IX SOMETHING-ONE WOMAN BOOK
+   92: JOHN *THROW *SOMETHING-ONE SOMETHING-ONE *OLD BOOK            JOHN GIVE IX SOMETHING-ONE WOMAN BOOK
+  100: POSS NEW CAR BREAK-DOWN                                       POSS NEW CAR BREAK-DOWN
+  105: JOHN *SEE                                                     JOHN LEG
+  107: *MARY POSS FRIEND *MARY *JOHN                                 JOHN POSS FRIEND HAVE CANDY
+  108: *OLD *BUY1                                                    WOMAN ARRIVE
+  113: *SHOOT CAR BLUE *WONT *BUY1                                   IX CAR BLUE SUE BUY
+  119: *VEGETABLE *BUY1 IX *JOHN *POSS                               SUE BUY IX CAR BLUE
+  122: JOHN *GIVE1 BOOK                                              JOHN READ BOOK
+  139: JOHN *BUY1 *TOY YESTERDAY BOOK                                JOHN BUY WHAT YESTERDAY BOOK
+  142: JOHN *ARRIVE YESTERDAY WHAT BOOK                              JOHN BUY YESTERDAY WHAT BOOK
+  158: LOVE *MARY WHO                                                LOVE JOHN WHO
+  167: *MARY *MARY *MARY LOVE *LOVE                                  JOHN IX SAY LOVE MARY
+  171: *MARY *TOY1 BLAME                                             JOHN MARY BLAME
+  174: *STUDENT GROUP GIVE1 *CORN TOY                                PEOPLE GROUP GIVE1 JANA TOY
+  181: *SUE *HOMEWORK                                                JOHN ARRIVE
+  184: ALL BOY *GIVE1 TEACHER APPLE                                  ALL BOY GIVE TEACHER APPLE
+  189: *JANA *SELF *CORN *LIVE                                       JOHN GIVE GIRL BOX
+  193: *IX *SELF *CORN BOX                                           JOHN GIVE GIRL BOX
+  199: *JOHN CHOCOLATE *TELL                                         LIKE CHOCOLATE WHO
+  201: JOHN *THINK *OLD *LIKE BUY HOUSE                              JOHN TELL MARY IX-1P BUY HOUSE
+In [42]:
+# TODO Choose a feature set and model selector
+features = features_minmax_norm # change as needed
+model_selector = SelectorCV # change as needed
+
+# TODO Recognize the test set and display the result with the show_errors method
+models = train_all_words(features, model_selector)
+test_set = asl.build_test(features)
+probabilities, guesses = recognize(models, test_set)
+show_errors(guesses, test_set)
+**** WER = 0.6741573033707865
+Total correct: 58 out of 178
+Video  Recognized                                                    Correct
+=====================================================================================================
+    2: JOHN WRITE HOMEWORK                                           JOHN WRITE HOMEWORK
+    7: *MARY *PEOPLE *MARY *TOY                                      JOHN CAN GO CAN
+   12: *WHAT *WHAT *GO1 CAN                                          JOHN CAN GO CAN
+   21: *ANN FISH *HOMEWORK *VEGETABLE BUT *BLAME *CHICKEN *EAT       JOHN FISH WONT EAT BUT CAN EAT CHICKEN
+   25: *ANN LIKE *ANN *LIKE *ANN                                     JOHN LIKE IX IX IX
+   28: *ANN LIKE *ANN *LIKE *ANN                                     JOHN LIKE IX IX IX
+   30: *LIKE LIKE *LIKE *LIKE *MARY                                  JOHN LIKE IX IX IX
+   36: MARY *JANA *GIVE1 *MARY LIKE *LIKE                            MARY VEGETABLE KNOW IX LIKE CORN1
+   40: *JANA *MARY *CORN *VEGETABLE *LIKE                            JOHN IX THINK MARY LOVE
+   43: JOHN *PAST BUY HOUSE                                          JOHN MUST BUY HOUSE
+   50: *TELL *FRANK *WRITE CAR *IX                                   FUTURE JOHN BUY CAR SHOULD
+   54: *SHOOT SHOULD *WILL BUY HOUSE                                 JOHN SHOULD NOT BUY HOUSE
+   57: *MARY *THINK *FRANK *GIVE2                                    JOHN DECIDE VISIT MARY
+   67: *TELL FUTURE *PREFER *STUDENT HOUSE                           JOHN FUTURE NOT BUY HOUSE
+   71: *SHOOT WILL *GO *BOX                                          JOHN WILL VISIT MARY
+   74: *MARY *MARY *MARY MARY                                        JOHN NOT VISIT MARY
+   77: ANN BLAME MARY                                                ANN BLAME MARY
+   84: *HOMEWORK *STUDENT *HOMEWORK BOOK                             IX-1P FIND SOMETHING-ONE BOOK
+   89: *THINK *FUTURE *SOMETHING-ONE *SOMETHING-ONE *SOMETHING-ONE *GIVE1 COAT  JOHN IX GIVE MAN IX NEW COAT
+   90: *PREFER *GIVE1 IX *IX *CORN BOOK                              JOHN GIVE IX SOMETHING-ONE WOMAN BOOK
+   92: *SOMETHING-ONE *SOMETHING-ONE *WOMAN *WOMAN *OLD BOOK         JOHN GIVE IX SOMETHING-ONE WOMAN BOOK
+  100: POSS NEW CAR BREAK-DOWN                                       POSS NEW CAR BREAK-DOWN
+  105: JOHN *SEE                                                     JOHN LEG
+  107: *MARY POSS FRIEND *BLUE *JANA                                 JOHN POSS FRIEND HAVE CANDY
+  108: *NOT *CHOCOLATE                                               WOMAN ARRIVE
+  113: *SHOOT CAR BLUE SUE *BUY1                                     IX CAR BLUE SUE BUY
+  119: *VEGETABLE *BUY1 *BLUE *BLAME *SELF                           SUE BUY IX CAR BLUE
+  122: *SHOOT READ BOOK                                              JOHN READ BOOK
+  139: *SHOOT *BUY1 *TOY *VISIT BOOK                                 JOHN BUY WHAT YESTERDAY BOOK
+  142: *FRANK *GROUP *CHICAGO WHAT BOOK                              JOHN BUY YESTERDAY WHAT BOOK
+  158: LOVE *MARY *VEGETABLE                                         LOVE JOHN WHO
+  167: *MARY *MARY *MARY LOVE *LOVE                                  JOHN IX SAY LOVE MARY
+  171: *MARY *TOY1 BLAME                                             JOHN MARY BLAME
+  174: *ARRIVE GROUP GIVE1 *CORN TOY                                 PEOPLE GROUP GIVE1 JANA TOY
+  181: *SUE *BOX                                                     JOHN ARRIVE
+  184: *THROW BOY *GIVE1 TEACHER APPLE                               ALL BOY GIVE TEACHER APPLE
+  189: *JANA *SELF *CORN *LIVE                                       JOHN GIVE GIRL BOX
+  193: *TOY1 *GIVE1 *CORN BOX                                        JOHN GIVE GIRL BOX
+  199: *HOMEWORK CHOCOLATE *FRANK                                    LIKE CHOCOLATE WHO
+  201: *SOMETHING-ONE *THINK *OLD *LIKE BUY HOUSE                    JOHN TELL MARY IX-1P BUY HOUSE
+In [43]:
+# TODO Choose a feature set and model selector
+features = features_minmax_norm_polar # change as needed
+model_selector = SelectorBIC # change as needed
+
+# TODO Recognize the test set and display the result with the show_errors method
+models = train_all_words(features, model_selector)
+test_set = asl.build_test(features)
+probabilities, guesses = recognize(models, test_set)
+show_errors(guesses, test_set)
+**** WER = 0.6348314606741573
+Total correct: 65 out of 178
+Video  Recognized                                                    Correct
+=====================================================================================================
+    2: JOHN WRITE HOMEWORK                                           JOHN WRITE HOMEWORK
+    7: JOHN CAN *MARY *TOY                                           JOHN CAN GO CAN
+   12: JOHN *SELL *CAN *HOUSE                                        JOHN CAN GO CAN
+   21: *MARY FISH WONT *JOHN BUT *PARTY *FUTURE *MOTHER              JOHN FISH WONT EAT BUT CAN EAT CHICKEN
+   25: *ANN *ANN *ANN *MARY IX                                       JOHN LIKE IX IX IX
+   28: *ANN *MARY *ANN *ANN IX                                       JOHN LIKE IX IX IX
+   30: *IX *MARY *MARY *BLUE *SHOULD                                 JOHN LIKE IX IX IX
+   36: *IX-1P VEGETABLE *GIRL *GIVE *MARY *TOY1                      MARY VEGETABLE KNOW IX LIKE CORN1
+   40: *MARY *JANA *PREFER *JANA *BLUE                               JOHN IX THINK MARY LOVE
+   43: JOHN *POSS BUY HOUSE                                          JOHN MUST BUY HOUSE
+   50: *JOHN *WHO *WRITE CAR *HOMEWORK                               FUTURE JOHN BUY CAR SHOULD
+   54: JOHN SHOULD *YESTERDAY BUY HOUSE                              JOHN SHOULD NOT BUY HOUSE
+   57: *IX *GIVE *GIVE MARY                                          JOHN DECIDE VISIT MARY
+   67: *BROTHER FUTURE *VISIT BUY HOUSE                              JOHN FUTURE NOT BUY HOUSE
+   71: JOHN *NOT *GIVE1 MARY                                         JOHN WILL VISIT MARY
+   74: JOHN *VEGETABLE *IX MARY                                      JOHN NOT VISIT MARY
+   77: ANN BLAME *ARRIVE                                             ANN BLAME MARY
+   84: *ANN *BORROW *WONT BOOK                                       IX-1P FIND SOMETHING-ONE BOOK
+   89: *MAN IX *MAN *IX *SEARCH-FOR NEW *BOOK                        JOHN IX GIVE MAN IX NEW COAT
+   90: *IX *IX *JOHN *IX WOMAN *NEW                                  JOHN GIVE IX SOMETHING-ONE WOMAN BOOK
+   92: *FRANK *BILL IX *IX *FINISH BOOK                              JOHN GIVE IX SOMETHING-ONE WOMAN BOOK
+  100: POSS NEW CAR BREAK-DOWN                                       POSS NEW CAR BREAK-DOWN
+  105: *FRANK *SEE                                                   JOHN LEG
+  107: *IX *SUE *BUY *SUE *JANA                                      JOHN POSS FRIEND HAVE CANDY
+  108: *MAN *BOX                                                     WOMAN ARRIVE
+  113: IX *HAVE *SUE *MARY *BUY1                                     IX CAR BLUE SUE BUY
+  119: *PREFER *BUY1 *BLUE *VISIT *SAY-1P                            SUE BUY IX CAR BLUE
+  122: JOHN *GIVE1 BOOK                                              JOHN READ BOOK
+  139: *IX *BUY1 *GO1 YESTERDAY BOOK                                 JOHN BUY WHAT YESTERDAY BOOK
+  142: JOHN BUY YESTERDAY WHAT BOOK                                  JOHN BUY YESTERDAY WHAT BOOK
+  158: LOVE JOHN WHO                                                 LOVE JOHN WHO
+  167: *MARY *TOY1 *JANA *WOMAN *PUTASIDE                            JOHN IX SAY LOVE MARY
+  171: *SUE MARY BLAME                                               JOHN MARY BLAME
+  174: *CAR GROUP GIVE1 *CORN *WANT                                  PEOPLE GROUP GIVE1 JANA TOY
+  181: *SUE ARRIVE                                                   JOHN ARRIVE
+  184: *IX *CORN *GIVE1 TEACHER *GIRL                                ALL BOY GIVE TEACHER APPLE
+  189: JOHN *SELF *GIVE *ARRIVE                                      JOHN GIVE GIRL BOX
+  193: JOHN *JOHN *GIVE BOX                                          JOHN GIVE GIRL BOX
+  199: *JOHN *HOMEWORK *FRANK                                        LIKE CHOCOLATE WHO
+  201: JOHN *MAN *MAN *WOMAN BUY HOUSE                               JOHN TELL MARY IX-1P BUY HOUSE
+In [44]:
+# TODO Choose a feature set and model selector
+features = features_minmax_norm_polar # change as needed
+model_selector = SelectorDIC # change as needed
+
+# TODO Recognize the test set and display the result with the show_errors method
+models = train_all_words(features, model_selector)
+test_set = asl.build_test(features)
+probabilities, guesses = recognize(models, test_set)
+show_errors(guesses, test_set)
+**** WER = 0.6179775280898876
+Total correct: 68 out of 178
+Video  Recognized                                                    Correct
+=====================================================================================================
+    2: JOHN WRITE HOMEWORK                                           JOHN WRITE HOMEWORK
+    7: JOHN CAN *MARY *TOY                                           JOHN CAN GO CAN
+   12: JOHN *STUDENT *CAN *HOUSE                                     JOHN CAN GO CAN
+   21: *MARY *NEW WONT *JOHN BUT *SELL *FUTURE *MOTHER               JOHN FISH WONT EAT BUT CAN EAT CHICKEN
+   25: *ANN *ANN *ANN *MARY IX                                       JOHN LIKE IX IX IX
+   28: *ANN *MARY *ANN *ANN *JOHN                                    JOHN LIKE IX IX IX
+   30: *IX LIKE *MARY *LIKE *SHOULD                                  JOHN LIKE IX IX IX
+   36: *VISIT VEGETABLE *GIRL *GIVE *MARY *TOY1                      MARY VEGETABLE KNOW IX LIKE CORN1
+   40: *MARY *JANA *PREFER *JANA *BLUE                               JOHN IX THINK MARY LOVE
+   43: JOHN *POSS BUY HOUSE                                          JOHN MUST BUY HOUSE
+   50: *JOHN *SEE BUY CAR *LOVE                                      FUTURE JOHN BUY CAR SHOULD
+   54: JOHN SHOULD *YESTERDAY BUY HOUSE                              JOHN SHOULD NOT BUY HOUSE
+   57: *IX *PREFER *WOMAN MARY                                       JOHN DECIDE VISIT MARY
+   67: *BROTHER *TELL *WOMAN BUY HOUSE                               JOHN FUTURE NOT BUY HOUSE
+   71: JOHN *NOT VISIT *BLAME                                        JOHN WILL VISIT MARY
+   74: JOHN *VEGETABLE *IX MARY                                      JOHN NOT VISIT MARY
+   77: ANN BLAME *LOVE                                               ANN BLAME MARY
+   84: *ANN *NEW *WONT BOOK                                          IX-1P FIND SOMETHING-ONE BOOK
+   89: *MAN *FUTURE *MAN *IX *SEARCH-FOR NEW *BOOK                   JOHN IX GIVE MAN IX NEW COAT
+   90: *IX *IX *JOHN *IX WOMAN *VIDEOTAPE                            JOHN GIVE IX SOMETHING-ONE WOMAN BOOK
+   92: JOHN *GIVE1 IX *IX *FINISH BOOK                               JOHN GIVE IX SOMETHING-ONE WOMAN BOOK
+  100: POSS NEW CAR BREAK-DOWN                                       POSS NEW CAR BREAK-DOWN
+  105: JOHN *SEE                                                     JOHN LEG
+  107: *IX *SUE *BUY *SUE *JANA                                      JOHN POSS FRIEND HAVE CANDY
+  108: *MAN *COAT                                                    WOMAN ARRIVE
+  113: IX *HAVE *SUE *MARY *BUY1                                     IX CAR BLUE SUE BUY
+  119: *PREFER *BUY1 *BLUE *VISIT *SAY-1P                            SUE BUY IX CAR BLUE
+  122: JOHN READ BOOK                                                JOHN READ BOOK
+  139: *IX *BUY1 WHAT YESTERDAY BOOK                                 JOHN BUY WHAT YESTERDAY BOOK
+  142: JOHN BUY YESTERDAY WHAT BOOK                                  JOHN BUY YESTERDAY WHAT BOOK
+  158: LOVE JOHN WHO                                                 LOVE JOHN WHO
+  167: *MARY *TOY1 *JANA *WOMAN *SUE                                 JOHN IX SAY LOVE MARY
+  171: *SUE MARY BLAME                                               JOHN MARY BLAME
+  174: *CAR GROUP GIVE1 *CORN *BLAME                                 PEOPLE GROUP GIVE1 JANA TOY
+  181: *SUE ARRIVE                                                   JOHN ARRIVE
+  184: ALL *CORN *GIVE1 TEACHER *GIRL                                ALL BOY GIVE TEACHER APPLE
+  189: JOHN *SELF *GIVE *BUY1                                        JOHN GIVE GIRL BOX
+  193: JOHN *JOHN *WHO BOX                                           JOHN GIVE GIRL BOX
+  199: *JOHN *NEW *TELL                                              LIKE CHOCOLATE WHO
+  201: JOHN *MAN *GIVE1 *POSS BUY HOUSE                              JOHN TELL MARY IX-1P BUY HOUSE
+In [45]:
+# TODO Choose a feature set and model selector
+features = features_minmax_norm_polar # change as needed
+model_selector = SelectorCV # change as needed
+
+# TODO Recognize the test set and display the result with the show_errors method
+models = train_all_words(features, model_selector)
+test_set = asl.build_test(features)
+probabilities, guesses = recognize(models, test_set)
+show_errors(guesses, test_set)
+**** WER = 0.6853932584269663
+Total correct: 56 out of 178
+Video  Recognized                                                    Correct
+=====================================================================================================
+    2: *MARY WRITE HOMEWORK                                          JOHN WRITE HOMEWORK
+    7: JOHN *PEOPLE *IX *WHAT                                        JOHN CAN GO CAN
+   12: *LOVE *HOUSE *PEOPLE *HOUSE                                   JOHN CAN GO CAN
+   21: *ANN FISH WONT *MOTHER BUT *SELL *CHICAGO *MOTHER             JOHN FISH WONT EAT BUT CAN EAT CHICKEN
+   25: *ANN *ANN *ANN *ANN IX                                        JOHN LIKE IX IX IX
+   28: *ANN *ANN *ANN *ANN *CHOCOLATE                                JOHN LIKE IX IX IX
+   30: *SHOULD *BLUE *BLUE *BLUE *SHOULD                             JOHN LIKE IX IX IX
+   36: *IX-1P VEGETABLE *GIRL *GIVE *FRANK *TOY1                     MARY VEGETABLE KNOW IX LIKE CORN1
+   40: JOHN *JANA *PREFER *JANA *BLUE                                JOHN IX THINK MARY LOVE
+   43: *FRANK *POSS *FRIEND HOUSE                                    JOHN MUST BUY HOUSE
+   50: *LEG *SEE *WRITE CAR *HOMEWORK                                FUTURE JOHN BUY CAR SHOULD
+   54: JOHN SHOULD *FUTURE BUY HOUSE                                 JOHN SHOULD NOT BUY HOUSE
+   57: JOHN *PREFER *GIVE *TOY1                                      JOHN DECIDE VISIT MARY
+   67: *POSS *TELL NOT BUY HOUSE                                     JOHN FUTURE NOT BUY HOUSE
+   71: JOHN *NOT *GO *BLAME                                          JOHN WILL VISIT MARY
+   74: *SHOOT *VEGETABLE *GIVE *TOY1                                 JOHN NOT VISIT MARY
+   77: ANN BLAME *CHOCOLATE                                          ANN BLAME MARY
+   84: *ANN *BORROW *WONT BOOK                                       IX-1P FIND SOMETHING-ONE BOOK
+   89: *MAN *FUTURE *MAN *BILL *WOMAN NEW *BREAK-DOWN                JOHN IX GIVE MAN IX NEW COAT
+   90: *GIVE GIVE *GIVE *GIVE WOMAN *BUY                             JOHN GIVE IX SOMETHING-ONE WOMAN BOOK
+   92: *FRANK *BILL *WOMAN *BILL *FINISH BOOK                        JOHN GIVE IX SOMETHING-ONE WOMAN BOOK
+  100: POSS NEW CAR BREAK-DOWN                                       POSS NEW CAR BREAK-DOWN
+  105: *FRANK *SEE                                                   JOHN LEG
+  107: *LIKE *SUE FRIEND *SUE *JANA                                  JOHN POSS FRIEND HAVE CANDY
+  108: *MAN *BOX                                                     WOMAN ARRIVE
+  113: IX CAR *SUE *TOY1 *BUY1                                       IX CAR BLUE SUE BUY
+  119: *PREFER *BUY1 *BLUE *BLAME *JANA                              SUE BUY IX CAR BLUE
+  122: JOHN *GIVE1 BOOK                                              JOHN READ BOOK
+  139: *LIKE *BUY1 *CAN *PEOPLE *BUY                                 JOHN BUY WHAT YESTERDAY BOOK
+  142: *HIT *WRITE *WHO WHAT BOOK                                    JOHN BUY YESTERDAY WHAT BOOK
+  158: LOVE JOHN WHO                                                 LOVE JOHN WHO
+  167: JOHN *TOY1 *JANA *WOMAN *SUE                                  JOHN IX SAY LOVE MARY
+  171: *SUE *TOY1 BLAME                                              JOHN MARY BLAME
+  174: *NEW GROUP GIVE1 *CORN TOY                                    PEOPLE GROUP GIVE1 JANA TOY
+  181: *SUE ARRIVE                                                   JOHN ARRIVE
+  184: ALL *GIRL *GIVE1 TEACHER *GIRL                                ALL BOY GIVE TEACHER APPLE
+  189: *SUE *JANA *GIVE BOX                                          JOHN GIVE GIRL BOX
+  193: JOHN GIVE GIRL BOX                                            JOHN GIVE GIRL BOX
+  199: *JOHN *HOMEWORK *TELL                                         LIKE CHOCOLATE WHO
+  201: *IX *MAN *MAN *POSS BUY HOUSE                                 JOHN TELL MARY IX-1P BUY HOUSE
+In [46]:
+# TODO Choose a feature set and model selector
+features = features_z_norm_polar # change as needed
+model_selector = SelectorBIC # change as needed
+
+# TODO Recognize the test set and display the result with the show_errors method
+models = train_all_words(features, model_selector)
+test_set = asl.build_test(features)
+probabilities, guesses = recognize(models, test_set)
+show_errors(guesses, test_set)
+**** WER = 0.5955056179775281
+Total correct: 72 out of 178
+Video  Recognized                                                    Correct
+=====================================================================================================
+    2: *WOMAN WRITE *GIVE1                                           JOHN WRITE HOMEWORK
+    7: *SOMETHING-ONE *BUY GO CAN                                    JOHN CAN GO CAN
+   12: JOHN *HAVE *NEW *HOUSE                                        JOHN CAN GO CAN
+   21: JOHN *NEW WONT *MARY *HOUSE *CAR *FUTURE *WRITE               JOHN FISH WONT EAT BUT CAN EAT CHICKEN
+   25: JOHN *MARY *GO *JOHN *LOVE                                    JOHN LIKE IX IX IX
+   28: JOHN *JOHN *GO *JOHN *LOVE                                    JOHN LIKE IX IX IX
+   30: *IX *MARY *MARY *LOVE *SHOOT                                  JOHN LIKE IX IX IX
+   36: *WHO *NOT *GIVE *TELL *LOVE *MARY                             MARY VEGETABLE KNOW IX LIKE CORN1
+   40: *LEAVE *JOHN *FUTURE1 *JOHN LOVE                              JOHN IX THINK MARY LOVE
+   43: JOHN *POSS BUY HOUSE                                          JOHN MUST BUY HOUSE
+   50: *JOHN *SEE BUY CAR *JOHN                                      FUTURE JOHN BUY CAR SHOULD
+   54: JOHN SHOULD NOT BUY HOUSE                                     JOHN SHOULD NOT BUY HOUSE
+   57: *MARY *VISIT *GO MARY                                         JOHN DECIDE VISIT MARY
+   67: JOHN *IX *JOHN BUY HOUSE                                      JOHN FUTURE NOT BUY HOUSE
+   71: JOHN *FINISH *GO *BLAME                                       JOHN WILL VISIT MARY
+   74: JOHN *JOHN *GIVE *LOVE                                        JOHN NOT VISIT MARY
+   77: *JOHN BLAME MARY                                              ANN BLAME MARY
+   84: *LOVE *BOX *POSS *COAT                                        IX-1P FIND SOMETHING-ONE BOOK
+   89: *FUTURE *JOHN *THROW *IX IX NEW *BREAK-DOWN                   JOHN IX GIVE MAN IX NEW COAT
+   90: *FUTURE *FUTURE IX SOMETHING-ONE *GO BOOK                     JOHN GIVE IX SOMETHING-ONE WOMAN BOOK
+   92: JOHN *IX IX *IX WOMAN *COAT                                   JOHN GIVE IX SOMETHING-ONE WOMAN BOOK
+  100: *IX NEW CAR BREAK-DOWN                                        POSS NEW CAR BREAK-DOWN
+  105: JOHN *SEE                                                     JOHN LEG
+  107: *LIKE POSS *HAVE *WOMAN CANDY                                 JOHN POSS FRIEND HAVE CANDY
+  108: *IX *HOMEWORK                                                 WOMAN ARRIVE
+  113: IX CAR *IX *SOMETHING-ONE *BOX                                IX CAR BLUE SUE BUY
+  119: *PREFER *BUY1 IX CAR *GO                                      SUE BUY IX CAR BLUE
+  122: JOHN *GIVE1 BOOK                                              JOHN READ BOOK
+  139: JOHN *ARRIVE *CAR *GO BOOK                                    JOHN BUY WHAT YESTERDAY BOOK
+  142: JOHN *HAVE YESTERDAY WHAT BOOK                                JOHN BUY YESTERDAY WHAT BOOK
+  158: LOVE JOHN *NOT                                                LOVE JOHN WHO
+  167: JOHN IX *SAY-1P *MARY *LOVE                                   JOHN IX SAY LOVE MARY
+  171: JOHN *IX BLAME                                                JOHN MARY BLAME
+  174: *HOUSE *GIVE3 GIVE1 *VISIT *GO                                PEOPLE GROUP GIVE1 JANA TOY
+  181: JOHN ARRIVE                                                   JOHN ARRIVE
+  184: *IX BOY *GIVE1 TEACHER APPLE                                  ALL BOY GIVE TEACHER APPLE
+  189: *MARY *LEAVE *GIVE BOX                                        JOHN GIVE GIRL BOX
+  193: JOHN *FUTURE *GIVE BOX                                        JOHN GIVE GIRL BOX
+  199: *LOVE CHOCOLATE WHO                                           LIKE CHOCOLATE WHO
+  201: JOHN *MAN *WOMAN *WOMAN *STUDENT HOUSE                        JOHN TELL MARY IX-1P BUY HOUSE
+In [47]:
+# TODO Choose a feature set and model selector
+features = features_z_norm_polar # change as needed
+model_selector = SelectorDIC # change as needed
+
+# TODO Recognize the test set and display the result with the show_errors method
+models = train_all_words(features, model_selector)
+test_set = asl.build_test(features)
+probabilities, guesses = recognize(models, test_set)
+show_errors(guesses, test_set)
+**** WER = 0.5730337078651685
+Total correct: 76 out of 178
+Video  Recognized                                                    Correct
+=====================================================================================================
+    2: JOHN WRITE *ARRIVE                                            JOHN WRITE HOMEWORK
+    7: *SOMETHING-ONE *NEW GO CAN                                    JOHN CAN GO CAN
+   12: JOHN *CAR *WHAT *HOUSE                                        JOHN CAN GO CAN
+   21: JOHN *NEW *JOHN *ANN *CAR *HOUSE *ARRIVE *YESTERDAY           JOHN FISH WONT EAT BUT CAN EAT CHICKEN
+   25: JOHN *MARY *MARY *JOHN *JOHN                                  JOHN LIKE IX IX IX
+   28: JOHN *JOHN *JOHN *JOHN *JOHN                                  JOHN LIKE IX IX IX
+   30: JOHN LIKE *MARY *MARY *SHOOT                                  JOHN LIKE IX IX IX
+   36: *IX *NOT *YESTERDAY *TELL *LOVE *MARY                         MARY VEGETABLE KNOW IX LIKE CORN1
+   40: *LEAVE *JOHN *FUTURE1 *JOHN LOVE                              JOHN IX THINK MARY LOVE
+   43: JOHN *JOHN BUY HOUSE                                          JOHN MUST BUY HOUSE
+   50: *JOHN *SEE BUY CAR *JOHN                                      FUTURE JOHN BUY CAR SHOULD
+   54: JOHN SHOULD *MARY BUY HOUSE                                   JOHN SHOULD NOT BUY HOUSE
+   57: *MARY *VISIT *GO MARY                                         JOHN DECIDE VISIT MARY
+   67: JOHN FUTURE *JOHN BUY HOUSE                                   JOHN FUTURE NOT BUY HOUSE
+   71: JOHN *FUTURE *GO MARY                                         JOHN WILL VISIT MARY
+   74: *IX *JOHN *JOHN *LOVE                                         JOHN NOT VISIT MARY
+   77: *JOHN BLAME MARY                                              ANN BLAME MARY
+   84: *JOHN *ARRIVE *VISIT *NEW                                     IX-1P FIND SOMETHING-ONE BOOK
+   89: *FUTURE IX *IX *THROW IX NEW COAT                             JOHN IX GIVE MAN IX NEW COAT
+   90: *FUTURE *SOMETHING-ONE IX SOMETHING-ONE WOMAN *VIDEOTAPE      JOHN GIVE IX SOMETHING-ONE WOMAN BOOK
+   92: JOHN *IX IX *IX WOMAN *VISIT                                  JOHN GIVE IX SOMETHING-ONE WOMAN BOOK
+  100: POSS NEW CAR BREAK-DOWN                                       POSS NEW CAR BREAK-DOWN
+  105: JOHN *POSS                                                    JOHN LEG
+  107: JOHN *IX *NEW *MARY CANDY                                     JOHN POSS FRIEND HAVE CANDY
+  108: *IX *JOHN                                                     WOMAN ARRIVE
+  113: IX *CAN *IX *SOMETHING-ONE *BOX                               IX CAR BLUE SUE BUY
+  119: *PREFER *LOVE IX CAR *GO                                      SUE BUY IX CAR BLUE
+  122: JOHN *GIVE1 BOOK                                              JOHN READ BOOK
+  139: JOHN *ARRIVE WHAT *JOHN BOOK                                  JOHN BUY WHAT YESTERDAY BOOK
+  142: JOHN BUY YESTERDAY WHAT BOOK                                  JOHN BUY YESTERDAY WHAT BOOK
+  158: LOVE JOHN *NOT                                                LOVE JOHN WHO
+  167: JOHN IX *SAY-1P *MARY *LOVE                                   JOHN IX SAY LOVE MARY
+  171: JOHN *SOMETHING-ONE BLAME                                     JOHN MARY BLAME
+  174: *CAR *GIVE1 GIVE1 *WHO *CAR                                   PEOPLE GROUP GIVE1 JANA TOY
+  181: JOHN ARRIVE                                                   JOHN ARRIVE
+  184: *IX *FUTURE *GIVE1 TEACHER APPLE                              ALL BOY GIVE TEACHER APPLE
+  189: *MARY *LEAVE *YESTERDAY *ARRIVE                               JOHN GIVE GIRL BOX
+  193: JOHN *SOMETHING-ONE *GO BOX                                   JOHN GIVE GIRL BOX
+  199: *JOHN *BUY1 WHO                                               LIKE CHOCOLATE WHO
+  201: JOHN *MAN *IX *JOHN BUY HOUSE                                 JOHN TELL MARY IX-1P BUY HOUSE
+In [48]:
+# TODO Choose a feature set and model selector
+features = features_z_norm_polar # change as needed
+model_selector = SelectorCV # change as needed
+
+# TODO Recognize the test set and display the result with the show_errors method
+models = train_all_words(features, model_selector)
+test_set = asl.build_test(features)
+probabilities, guesses = recognize(models, test_set)
+show_errors(guesses, test_set)
+**** WER = 0.6235955056179775
+Total correct: 67 out of 178
+Video  Recognized                                                    Correct
+=====================================================================================================
+    2: *WOMAN WRITE HOMEWORK                                         JOHN WRITE HOMEWORK
+    7: JOHN *BUY *MARY CAN                                           JOHN CAN GO CAN
+   12: *IX *CAR *WHAT *WHAT                                          JOHN CAN GO CAN
+   21: JOHN *NEW *NEW *IX-1P *HOUSE *CAR *FUTURE *WHO                JOHN FISH WONT EAT BUT CAN EAT CHICKEN
+   25: *IX *IX *MARY IX *MARY                                        JOHN LIKE IX IX IX
+   28: *IX *JOHN *LOVE IX *MARY                                      JOHN LIKE IX IX IX
+   30: *SHOOT LIKE *MARY *LOVE *MARY                                 JOHN LIKE IX IX IX
+   36: MARY *NOT *GIRL *TELL *LOVE *LIKE                             MARY VEGETABLE KNOW IX LIKE CORN1
+   40: *SUE *GIVE *FUTURE1 *SUE *MARY                                JOHN IX THINK MARY LOVE
+   43: *FRANK *SHOULD BUY HOUSE                                      JOHN MUST BUY HOUSE
+   50: *FRANK *SEE BUY CAR *SOMETHING-ONE                            FUTURE JOHN BUY CAR SHOULD
+   54: JOHN *FRANK NOT BUY HOUSE                                     JOHN SHOULD NOT BUY HOUSE
+   57: JOHN *MOTHER *WOMAN MARY                                      JOHN DECIDE VISIT MARY
+   67: JOHN *GIVE1 *GO BUY HOUSE                                     JOHN FUTURE NOT BUY HOUSE
+   71: JOHN *SEE *GO MARY                                            JOHN WILL VISIT MARY
+   74: *SHOOT NOT *GIVE MARY                                         JOHN NOT VISIT MARY
+   77: *IX BLAME MARY                                                ANN BLAME MARY
+   84: *LOVE *SOMETHING-ONE *POSS BOOK                               IX-1P FIND SOMETHING-ONE BOOK
+   89: *FUTURE *SHOULD *THROW *WOMAN IX NEW *BREAK-DOWN              JOHN IX GIVE MAN IX NEW COAT
+   90: *SEE *FUTURE IX *POSS WOMAN BOOK                              JOHN GIVE IX SOMETHING-ONE WOMAN BOOK
+   92: JOHN GIVE IX *IX WOMAN BOOK                                   JOHN GIVE IX SOMETHING-ONE WOMAN BOOK
+  100: POSS NEW CAR BREAK-DOWN                                       POSS NEW CAR BREAK-DOWN
+  105: *FRANK *SEE                                                   JOHN LEG
+  107: *LIKE *JOHN *HAVE *MARY CANDY                                 JOHN POSS FRIEND HAVE CANDY
+  108: *WHO *HOMEWORK                                                WOMAN ARRIVE
+  113: IX *CAN *SUE *LEAVE *SOMETHING-ONE                            IX CAR BLUE SUE BUY
+  119: *PREFER *BUY1 *CAR *ARRIVE *SEE                               SUE BUY IX CAR BLUE
+  122: JOHN *GIVE1 BOOK                                              JOHN READ BOOK
+  139: JOHN *BUY1 *CAR *GO BOOK                                      JOHN BUY WHAT YESTERDAY BOOK
+  142: *FRANK *ARRIVE YESTERDAY WHAT BOOK                            JOHN BUY YESTERDAY WHAT BOOK
+  158: LOVE *MARY WHO                                                LOVE JOHN WHO
+  167: JOHN *LEAVE *NOT *MARY *LOVE                                  JOHN IX SAY LOVE MARY
+  171: *LIKE *JOHN BLAME                                             JOHN MARY BLAME
+  174: *COAT *GIVE3 GIVE1 *NOT *CAR                                  PEOPLE GROUP GIVE1 JANA TOY
+  181: JOHN ARRIVE                                                   JOHN ARRIVE
+  184: *IX BOY *GIVE1 TEACHER APPLE                                  ALL BOY GIVE TEACHER APPLE
+  189: *JANA *FUTURE *GIVE *ARRIVE                                   JOHN GIVE GIRL BOX
+  193: JOHN *SOMETHING-ONE *YESTERDAY BOX                            JOHN GIVE GIRL BOX
+  199: *LOVE *HOMEWORK WHO                                           LIKE CHOCOLATE WHO
+  201: JOHN *MAN *WOMAN *JOHN *STUDENT HOUSE                         JOHN TELL MARY IX-1P BUY HOUSE
+In [49]:
+# TODO Choose a feature set and model selector
+features = features_delta_polar # change as needed
+model_selector = SelectorBIC # change as needed
+
+# TODO Recognize the test set and display the result with the show_errors method
+models = train_all_words(features, model_selector)
+test_set = asl.build_test(features)
+probabilities, guesses = recognize(models, test_set)
+show_errors(guesses, test_set)
+**** WER = 0.6123595505617978
+Total correct: 69 out of 178
+Video  Recognized                                                    Correct
+=====================================================================================================
+    2: JOHN *IX HOMEWORK                                             JOHN WRITE HOMEWORK
+    7: JOHN *HAVE *GIVE *STUDENT                                     JOHN CAN GO CAN
+   12: JOHN CAN *GO1 CAN                                             JOHN CAN GO CAN
+   21: JOHN *MARY *FUTURE *MARY *STUDENT *FUTURE *FUTURE *MARY       JOHN FISH WONT EAT BUT CAN EAT CHICKEN
+   25: JOHN *IX *JOHN IX IX                                          JOHN LIKE IX IX IX
+   28: JOHN *MARY *MARY IX IX                                        JOHN LIKE IX IX IX
+   30: JOHN *MARY *MARY *JOHN IX                                     JOHN LIKE IX IX IX
+   36: MARY *JOHN *APPLE *GIVE *TOY1 *MARY                           MARY VEGETABLE KNOW IX LIKE CORN1
+   40: JOHN IX *JOHN MARY *MARY                                      JOHN IX THINK MARY LOVE
+   43: JOHN *SHOULD BUY HOUSE                                        JOHN MUST BUY HOUSE
+   50: *JOHN *SOMETHING-ONE BUY CAR *MARY                            FUTURE JOHN BUY CAR SHOULD
+   54: JOHN *IX *JOHN BUY *HOMEWORK                                  JOHN SHOULD NOT BUY HOUSE
+   57: *IX *JOHN *GIVE *IX                                           JOHN DECIDE VISIT MARY
+   67: JOHN FUTURE *APPLE BUY *BOOK                                  JOHN FUTURE NOT BUY HOUSE
+   71: JOHN *SOMETHING-ONE *BLAME *CAR                               JOHN WILL VISIT MARY
+   74: JOHN *IX *IX *IX                                              JOHN NOT VISIT MARY
+   77: *JOHN BLAME MARY                                              ANN BLAME MARY
+   84: *JOHN *GIVE1 *FUTURE BOOK                                     IX-1P FIND SOMETHING-ONE BOOK
+   89: *IX IX *IX *THROW *GO *CAR *BOOK                              JOHN IX GIVE MAN IX NEW COAT
+   90: JOHN *IX IX *IX WOMAN *LOVE                                   JOHN GIVE IX SOMETHING-ONE WOMAN BOOK
+   92: JOHN *IX IX *IX WOMAN *CAR                                    JOHN GIVE IX SOMETHING-ONE WOMAN BOOK
+  100: *IX NEW CAR BREAK-DOWN                                        POSS NEW CAR BREAK-DOWN
+  105: JOHN *MARY                                                    JOHN LEG
+  107: JOHN *JOHN FRIEND HAVE *JOHN                                  JOHN POSS FRIEND HAVE CANDY
+  108: *IX *BOOK                                                     WOMAN ARRIVE
+  113: *JOHN *PEOPLE *MARY *JOHN *BUY1                               IX CAR BLUE SUE BUY
+  119: *JOHN *BUY1 *HERE *PEOPLE *JOHN                               SUE BUY IX CAR BLUE
+  122: JOHN *GIVE1 *CAR                                              JOHN READ BOOK
+  139: JOHN *BUY1 WHAT *SEE *WHAT                                    JOHN BUY WHAT YESTERDAY BOOK
+  142: JOHN BUY YESTERDAY *MARY *MARY                                JOHN BUY YESTERDAY WHAT BOOK
+  158: LOVE JOHN *JOHN                                               LOVE JOHN WHO
+  167: JOHN *SEE *IX *FRIEND *GO1                                    JOHN IX SAY LOVE MARY
+  171: JOHN *JOHN BLAME                                              JOHN MARY BLAME
+  174: *GIVE1 *JOHN GIVE1 *MARY *CAR                                 PEOPLE GROUP GIVE1 JANA TOY
+  181: JOHN ARRIVE                                                   JOHN ARRIVE
+  184: ALL *JOHN *GIVE1 TEACHER *MARY                                ALL BOY GIVE TEACHER APPLE
+  189: JOHN *IX *MARY *ARRIVE                                        JOHN GIVE GIRL BOX
+  193: JOHN *IX *APPLE BOX                                           JOHN GIVE GIRL BOX
+  199: *JOHN *ARRIVE *MARY                                           LIKE CHOCOLATE WHO
+  201: JOHN *MARY *WHO *POSS *STUDENT HOUSE                          JOHN TELL MARY IX-1P BUY HOUSE
+In [50]:
+# TODO Choose a feature set and model selector
+features = features_delta_polar # change as needed
+model_selector = SelectorDIC # change as needed
+
+# TODO Recognize the test set and display the result with the show_errors method
+models = train_all_words(features, model_selector)
+test_set = asl.build_test(features)
+probabilities, guesses = recognize(models, test_set)
+show_errors(guesses, test_set)
+**** WER = 0.5842696629213483
+Total correct: 74 out of 178
+Video  Recognized                                                    Correct
+=====================================================================================================
+    2: *IX *IX HOMEWORK                                              JOHN WRITE HOMEWORK
+    7: JOHN *ARRIVE GO *TOY                                          JOHN CAN GO CAN
+   12: JOHN *BOX *HOMEWORK CAN                                       JOHN CAN GO CAN
+   21: JOHN *MARY *HOMEWORK *WHO *HOUSE *FUTURE *FUTURE *MARY        JOHN FISH WONT EAT BUT CAN EAT CHICKEN
+   25: JOHN *IX *JOHN IX IX                                          JOHN LIKE IX IX IX
+   28: JOHN *MARY *MARY IX IX                                        JOHN LIKE IX IX IX
+   30: JOHN *MARY IX *JOHN IX                                        JOHN LIKE IX IX IX
+   36: *JOHN *JOHN *IX IX *MARY *MARY                                MARY VEGETABLE KNOW IX LIKE CORN1
+   40: JOHN IX *JOHN MARY *IX                                        JOHN IX THINK MARY LOVE
+   43: JOHN *IX *DECIDE HOUSE                                        JOHN MUST BUY HOUSE
+   50: *JOHN JOHN BUY CAR *VISIT                                     FUTURE JOHN BUY CAR SHOULD
+   54: JOHN *IX *JOHN BUY *HOMEWORK                                  JOHN SHOULD NOT BUY HOUSE
+   57: JOHN *IX *IX *IX                                              JOHN DECIDE VISIT MARY
+   67: JOHN *IX *IX BUY *BOOK                                        JOHN FUTURE NOT BUY HOUSE
+   71: JOHN *JOHN *GO *HOMEWORK                                      JOHN WILL VISIT MARY
+   74: JOHN *IX *WHO *IX                                             JOHN NOT VISIT MARY
+   77: *JOHN BLAME MARY                                              ANN BLAME MARY
+   84: *JOHN *GIVE1 *IX BOOK                                         IX-1P FIND SOMETHING-ONE BOOK
+   89: *GIVE1 IX GIVE *BROTHER *GO *CAR *BOOK                        JOHN IX GIVE MAN IX NEW COAT
+   90: JOHN *IX IX *IX *IX *LOVE                                     JOHN GIVE IX SOMETHING-ONE WOMAN BOOK
+   92: JOHN *IX IX *IX WOMAN *CAR                                    JOHN GIVE IX SOMETHING-ONE WOMAN BOOK
+  100: *IX NEW CAR BREAK-DOWN                                        POSS NEW CAR BREAK-DOWN
+  105: JOHN *MARY                                                    JOHN LEG
+  107: JOHN *IX *ARRIVE *WHO *JOHN                                   JOHN POSS FRIEND HAVE CANDY
+  108: *IX ARRIVE                                                    WOMAN ARRIVE
+  113: *JOHN CAR *MARY *JOHN *BUY1                                   IX CAR BLUE SUE BUY
+  119: *JOHN *BUY1 IX CAR *IX                                        SUE BUY IX CAR BLUE
+  122: JOHN *BUY BOOK                                                JOHN READ BOOK
+  139: JOHN *BROTHER WHAT *JOHN *CAR                                 JOHN BUY WHAT YESTERDAY BOOK
+  142: JOHN BUY *IX WHAT *MARY                                       JOHN BUY YESTERDAY WHAT BOOK
+  158: LOVE JOHN *JOHN                                               LOVE JOHN WHO
+  167: JOHN *JOHN *IX LOVE MARY                                      JOHN IX SAY LOVE MARY
+  171: JOHN *JOHN BLAME                                              JOHN MARY BLAME
+  174: *GIVE1 *ARRIVE GIVE1 *MARY *CAR                               PEOPLE GROUP GIVE1 JANA TOY
+  181: JOHN ARRIVE                                                   JOHN ARRIVE
+  184: ALL *LOVE *GIVE1 TEACHER *MARY                                ALL BOY GIVE TEACHER APPLE
+  189: JOHN *IX *IX *BOOK                                            JOHN GIVE GIRL BOX
+  193: *IX *IX *HOUSE BOX                                            JOHN GIVE GIRL BOX
+  199: *JOHN *LOVE *MARY                                             LIKE CHOCOLATE WHO
+  201: JOHN *NOT *WHO *JOHN BUY HOUSE                                JOHN TELL MARY IX-1P BUY HOUSE
+In [51]:
+# TODO Choose a feature set and model selector
+features = features_delta_polar # change as needed
+model_selector = SelectorCV # change as needed
+
+# TODO Recognize the test set and display the result with the show_errors method
+models = train_all_words(features, model_selector)
+test_set = asl.build_test(features)
+probabilities, guesses = recognize(models, test_set)
+show_errors(guesses, test_set)
+**** WER = 0.6179775280898876
+Total correct: 68 out of 178
+Video  Recognized                                                    Correct
+=====================================================================================================
+    2: JOHN *LOVE HOMEWORK                                           JOHN WRITE HOMEWORK
+    7: JOHN *HAVE GO *STUDENT                                        JOHN CAN GO CAN
+   12: JOHN CAN *GO1 CAN                                             JOHN CAN GO CAN
+   21: JOHN *SOMETHING-ONE *FUTURE *MARY *CAR *FUTURE *WHAT *MARY    JOHN FISH WONT EAT BUT CAN EAT CHICKEN
+   25: JOHN *IX IX IX IX                                             JOHN LIKE IX IX IX
+   28: JOHN *MARY *MARY IX IX                                        JOHN LIKE IX IX IX
+   30: JOHN *MARY *LOVE *JOHN IX                                     JOHN LIKE IX IX IX
+   36: MARY *SOMETHING-ONE *YESTERDAY *GO *GIVE *MARY                MARY VEGETABLE KNOW IX LIKE CORN1
+   40: *WHO IX *WHO *WHO *GIVE                                       JOHN IX THINK MARY LOVE
+   43: JOHN *SHOULD BUY HOUSE                                        JOHN MUST BUY HOUSE
+   50: *JOHN *SOMETHING-ONE BUY CAR *MARY                            FUTURE JOHN BUY CAR SHOULD
+   54: JOHN *JOHN *MARY BUY HOUSE                                    JOHN SHOULD NOT BUY HOUSE
+   57: *IX *JOHN *WOMAN *JOHN                                        JOHN DECIDE VISIT MARY
+   67: JOHN *YESTERDAY *WHO BUY HOUSE                                JOHN FUTURE NOT BUY HOUSE
+   71: JOHN *SOMETHING-ONE *BLAME *HOUSE                             JOHN WILL VISIT MARY
+   74: JOHN *JOHN *GIVE *IX                                          JOHN NOT VISIT MARY
+   77: *JOHN BLAME MARY                                              ANN BLAME MARY
+   84: *JOHN *GO *FUTURE *WRITE                                      IX-1P FIND SOMETHING-ONE BOOK
+   89: *IX *JOHN *IX *BOY *GIVE *CAR *HOUSE                          JOHN IX GIVE MAN IX NEW COAT
+   90: *MARY *IX IX *IX WOMAN *LOVE                                  JOHN GIVE IX SOMETHING-ONE WOMAN BOOK
+   92: JOHN *IX IX *IX WOMAN *HOUSE                                  JOHN GIVE IX SOMETHING-ONE WOMAN BOOK
+  100: *IX NEW CAR BREAK-DOWN                                        POSS NEW CAR BREAK-DOWN
+  105: JOHN *MARY                                                    JOHN LEG
+  107: JOHN POSS FRIEND HAVE *MARY                                   JOHN POSS FRIEND HAVE CANDY
+  108: *IX *STUDENT                                                  WOMAN ARRIVE
+  113: *JOHN *PEOPLE *MARY *JOHN *BUY1                               IX CAR BLUE SUE BUY
+  119: *JOHN *BUY1 *TOMORROW *PEOPLE *WHO                            SUE BUY IX CAR BLUE
+  122: JOHN *CAR *COAT                                               JOHN READ BOOK
+  139: JOHN *LOVE WHAT *WHO *ARRIVE                                  JOHN BUY WHAT YESTERDAY BOOK
+  142: JOHN BUY *MARY *MARY *WHAT                                    JOHN BUY YESTERDAY WHAT BOOK
+  158: LOVE *WHO *MARY                                               LOVE JOHN WHO
+  167: JOHN *WHO *IX LOVE *GO1                                       JOHN IX SAY LOVE MARY
+  171: JOHN MARY BLAME                                               JOHN MARY BLAME
+  174: *GIVE1 *MARY GIVE1 *MARY *FINISH                              PEOPLE GROUP GIVE1 JANA TOY
+  181: JOHN *BOOK                                                    JOHN ARRIVE
+  184: ALL *WHO *GIVE1 TEACHER *MARY                                 ALL BOY GIVE TEACHER APPLE
+  189: JOHN *JOHN *LOVE *BOOK                                        JOHN GIVE GIRL BOX
+  193: JOHN *IX *WHO BOX                                             JOHN GIVE GIRL BOX
+  199: *JOHN CHOCOLATE *MARY                                         LIKE CHOCOLATE WHO
+  201: JOHN *WHO *WHO *NOT *STUDENT HOUSE                            JOHN TELL MARY IX-1P BUY HOUSE
+In [52]:
+# TODO Choose a feature set and model selector
+features = features_delta_polar + features_minmax_norm # change as needed
+model_selector = SelectorBIC # change as needed
+
+# TODO Recognize the test set and display the result with the show_errors method
+models = train_all_words(features, model_selector)
+test_set = asl.build_test(features)
+probabilities, guesses = recognize(models, test_set)
+show_errors(guesses, test_set)
+**** WER = 0.4438202247191011
+Total correct: 99 out of 178
+Video  Recognized                                                    Correct
+=====================================================================================================
+    2: JOHN WRITE HOMEWORK                                           JOHN WRITE HOMEWORK
+    7: JOHN *CAR GO *TOY                                             JOHN CAN GO CAN
+   12: JOHN CAN *GO1 CAN                                             JOHN CAN GO CAN
+   21: *MARY *MOTHER *HOMEWORK *MARY BUT *CAR *CHICKEN *EAT          JOHN FISH WONT EAT BUT CAN EAT CHICKEN
+   25: *MARY LIKE IX *LIKE IX                                        JOHN LIKE IX IX IX
+   28: JOHN LIKE IX IX IX                                            JOHN LIKE IX IX IX
+   30: JOHN *MARY *MARY *MARY *MARY                                  JOHN LIKE IX IX IX
+   36: MARY *JOHN *GIVE1 *GO *BILL *MARY                             MARY VEGETABLE KNOW IX LIKE CORN1
+   40: JOHN *BILL *WHO *VEGETABLE *MARY                              JOHN IX THINK MARY LOVE
+   43: JOHN *FUTURE BUY HOUSE                                        JOHN MUST BUY HOUSE
+   50: *FRANK *SEE BUY CAR *ARRIVE                                   FUTURE JOHN BUY CAR SHOULD
+   54: JOHN SHOULD *MARY BUY HOUSE                                   JOHN SHOULD NOT BUY HOUSE
+   57: *MARY *JOHN *WOMAN MARY                                       JOHN DECIDE VISIT MARY
+   67: JOHN FUTURE NOT BUY HOUSE                                     JOHN FUTURE NOT BUY HOUSE
+   71: JOHN *SOMETHING-ONE VISIT MARY                                JOHN WILL VISIT MARY
+   74: *MARY *MARY *GIVE MARY                                        JOHN NOT VISIT MARY
+   77: ANN BLAME MARY                                                ANN BLAME MARY
+   84: *JOHN *BUY *ARRIVE *WRITE                                     IX-1P FIND SOMETHING-ONE BOOK
+   89: *FUTURE *POSS *IX *THROW IX NEW COAT                          JOHN IX GIVE MAN IX NEW COAT
+   90: JOHN *GIVE1 IX *IX WOMAN BOOK                                 JOHN GIVE IX SOMETHING-ONE WOMAN BOOK
+   92: JOHN *IX IX *IX WOMAN BOOK                                    JOHN GIVE IX SOMETHING-ONE WOMAN BOOK
+  100: POSS NEW CAR BREAK-DOWN                                       POSS NEW CAR BREAK-DOWN
+  105: JOHN *PREFER                                                  JOHN LEG
+  107: JOHN *JOHN FRIEND *MARY *MARY                                 JOHN POSS FRIEND HAVE CANDY
+  108: *JOHN ARRIVE                                                  WOMAN ARRIVE
+  113: *JOHN CAR *MARY *JOHN *BUY1                                   IX CAR BLUE SUE BUY
+  119: *JOHN *BUY1 IX CAR *IX                                        SUE BUY IX CAR BLUE
+  122: JOHN READ BOOK                                                JOHN READ BOOK
+  139: JOHN *BUY1 WHAT *EAT BOOK                                     JOHN BUY WHAT YESTERDAY BOOK
+  142: JOHN BUY YESTERDAY WHAT BOOK                                  JOHN BUY YESTERDAY WHAT BOOK
+  158: LOVE JOHN *MARY                                               LOVE JOHN WHO
+  167: JOHN *WONT *MARY LOVE MARY                                    JOHN IX SAY LOVE MARY
+  171: JOHN *JOHN BLAME                                              JOHN MARY BLAME
+  174: *NEW GROUP GIVE1 *MARY TOY                                    PEOPLE GROUP GIVE1 JANA TOY
+  181: *SUE ARRIVE                                                   JOHN ARRIVE
+  184: ALL BOY *GIVE1 TEACHER APPLE                                  ALL BOY GIVE TEACHER APPLE
+  189: JOHN *JOHN GIRL *ARRIVE                                       JOHN GIVE GIRL BOX
+  193: JOHN *GIVE1 *OLD BOX                                          JOHN GIVE GIRL BOX
+  199: *JOHN CHOCOLATE WHO                                           LIKE CHOCOLATE WHO
+  201: JOHN *WHO *WHO *LIKE BUY HOUSE                                JOHN TELL MARY IX-1P BUY HOUSE
+In [53]:
+# TODO Choose a feature set and model selector
+features = features_delta_polar + features_minmax_norm # change as needed
+model_selector = SelectorDIC # change as needed
+
+# TODO Recognize the test set and display the result with the show_errors method
+models = train_all_words(features, model_selector)
+test_set = asl.build_test(features)
+probabilities, guesses = recognize(models, test_set)
+show_errors(guesses, test_set)
+**** WER = 0.48314606741573035
+Total correct: 92 out of 178
+Video  Recognized                                                    Correct
+=====================================================================================================
+    2: JOHN WRITE HOMEWORK                                           JOHN WRITE HOMEWORK
+    7: JOHN *CAR GO *TOY                                             JOHN CAN GO CAN
+   12: JOHN *WHAT *GO1 CAN                                           JOHN CAN GO CAN
+   21: JOHN *VIDEOTAPE *HOMEWORK *VISIT *CAR *CAR *FUTURE *EAT       JOHN FISH WONT EAT BUT CAN EAT CHICKEN
+   25: *MARY *IX *JOHN *LIKE IX                                      JOHN LIKE IX IX IX
+   28: JOHN *IX IX IX IX                                             JOHN LIKE IX IX IX
+   30: JOHN *MARY *LOVE *MARY *MARY                                  JOHN LIKE IX IX IX
+   36: MARY *JOHN *GIVE1 *GIVE *LOVE *MARY                           MARY VEGETABLE KNOW IX LIKE CORN1
+   40: JOHN *VISIT *WHO *VEGETABLE LOVE                              JOHN IX THINK MARY LOVE
+   43: JOHN *FUTURE BUY HOUSE                                        JOHN MUST BUY HOUSE
+   50: *POSS *IX-1P BUY CAR *IX                                      FUTURE JOHN BUY CAR SHOULD
+   54: JOHN SHOULD *FRANK BUY HOUSE                                  JOHN SHOULD NOT BUY HOUSE
+   57: *MARY *JOHN *WOMAN MARY                                       JOHN DECIDE VISIT MARY
+   67: JOHN FUTURE NOT BUY HOUSE                                     JOHN FUTURE NOT BUY HOUSE
+   71: JOHN *SOMETHING-ONE VISIT MARY                                JOHN WILL VISIT MARY
+   74: *MARY *MARY VISIT MARY                                        JOHN NOT VISIT MARY
+   77: ANN BLAME MARY                                                ANN BLAME MARY
+   84: *JOHN *BUY *BLAME *WRITE                                      IX-1P FIND SOMETHING-ONE BOOK
+   89: *MARY *FUTURE *IX *IX IX *NEW-YORK *BREAK-DOWN                JOHN IX GIVE MAN IX NEW COAT
+   90: JOHN *GIVE1 IX *IX WOMAN BOOK                                 JOHN GIVE IX SOMETHING-ONE WOMAN BOOK
+   92: JOHN *IX IX SOMETHING-ONE WOMAN BOOK                          JOHN GIVE IX SOMETHING-ONE WOMAN BOOK
+  100: *SOMETHING-ONE NEW CAR BREAK-DOWN                             POSS NEW CAR BREAK-DOWN
+  105: JOHN *FUTURE                                                  JOHN LEG
+  107: JOHN *JOHN *ARRIVE *MARY *MARY                                JOHN POSS FRIEND HAVE CANDY
+  108: *JOHN ARRIVE                                                  WOMAN ARRIVE
+  113: *JOHN CAR *MARY *JOHN *BUY1                                   IX CAR BLUE SUE BUY
+  119: *JOHN *BUY1 IX CAR *APPLE                                     SUE BUY IX CAR BLUE
+  122: JOHN *GIVE1 BOOK                                              JOHN READ BOOK
+  139: JOHN *ARRIVE WHAT YESTERDAY BOOK                              JOHN BUY WHAT YESTERDAY BOOK
+  142: JOHN BUY *FUTURE WHAT BOOK                                    JOHN BUY YESTERDAY WHAT BOOK
+  158: LOVE *WHO *MARY                                               LOVE JOHN WHO
+  167: JOHN *SOMETHING-ONE *MARY LOVE MARY                           JOHN IX SAY LOVE MARY
+  171: JOHN *JOHN BLAME                                              JOHN MARY BLAME
+  174: *BROTHER GROUP GIVE1 *MARY TOY                                PEOPLE GROUP GIVE1 JANA TOY
+  181: *SUE ARRIVE                                                   JOHN ARRIVE
+  184: ALL BOY *GIVE1 TEACHER APPLE                                  ALL BOY GIVE TEACHER APPLE
+  189: JOHN *JOHN *CORN *ARRIVE                                      JOHN GIVE GIRL BOX
+  193: JOHN *GIVE1 *CORN BOX                                         JOHN GIVE GIRL BOX
+  199: *JOHN CHOCOLATE WHO                                           LIKE CHOCOLATE WHO
+  201: JOHN *WHO MARY *WOMAN BUY HOUSE                               JOHN TELL MARY IX-1P BUY HOUSE
+In [54]:
+# TODO Choose a feature set and model selector
+features = features_delta_polar + features_minmax_norm # change as needed
+model_selector = SelectorCV # change as needed
+
+# TODO Recognize the test set and display the result with the show_errors method
+models = train_all_words(features, model_selector)
+test_set = asl.build_test(features)
+probabilities, guesses = recognize(models, test_set)
+show_errors(guesses, test_set)
+**** WER = 0.5224719101123596
+Total correct: 85 out of 178
+Video  Recognized                                                    Correct
+=====================================================================================================
+    2: JOHN WRITE HOMEWORK                                           JOHN WRITE HOMEWORK
+    7: JOHN *CAR GO *ARRIVE                                          JOHN CAN GO CAN
+   12: JOHN CAN *GO1 CAN                                             JOHN CAN GO CAN
+   21: JOHN *MOTHER *HOMEWORK *MOTHER *CAR *CAR *CHICKEN *EAT        JOHN FISH WONT EAT BUT CAN EAT CHICKEN
+   25: JOHN *MARY *MARY *LIKE *MARY                                  JOHN LIKE IX IX IX
+   28: JOHN *MARY *MARY *MARY *MARY                                  JOHN LIKE IX IX IX
+   30: JOHN *IX *LOVE IX IX                                          JOHN LIKE IX IX IX
+   36: *BILL VEGETABLE *GIVE1 *GIVE *BILL *MARY                      MARY VEGETABLE KNOW IX LIKE CORN1
+   40: *TOY1 IX *WHO *VEGETABLE LOVE                                 JOHN IX THINK MARY LOVE
+   43: JOHN *POSS BUY HOUSE                                          JOHN MUST BUY HOUSE
+   50: *FRANK *PREFER BUY CAR *ARRIVE                                FUTURE JOHN BUY CAR SHOULD
+   54: JOHN SHOULD *WHO BUY HOUSE                                    JOHN SHOULD NOT BUY HOUSE
+   57: *IX *MARY *WOMAN *WOMAN                                       JOHN DECIDE VISIT MARY
+   67: JOHN *SOMETHING-ONE NOT BUY HOUSE                             JOHN FUTURE NOT BUY HOUSE
+   71: JOHN *SOMETHING-ONE VISIT MARY                                JOHN WILL VISIT MARY
+   74: *IX *MARY *GIVE *IX                                           JOHN NOT VISIT MARY
+   77: *JOHN BLAME MARY                                              ANN BLAME MARY
+   84: *JOHN *BUY *ARRIVE BOOK                                       IX-1P FIND SOMETHING-ONE BOOK
+   89: JOHN *POSS *THROW *THROW *THROW *BOOK COAT                    JOHN IX GIVE MAN IX NEW COAT
+   90: *MARY *IX IX *IX WOMAN BOOK                                   JOHN GIVE IX SOMETHING-ONE WOMAN BOOK
+   92: JOHN *SOMETHING-ONE *WOMAN SOMETHING-ONE WOMAN BOOK           JOHN GIVE IX SOMETHING-ONE WOMAN BOOK
+  100: POSS NEW CAR BREAK-DOWN                                       POSS NEW CAR BREAK-DOWN
+  105: JOHN *POSS                                                    JOHN LEG
+  107: *SHOULD *IX FRIEND *LIKE *MARY                                JOHN POSS FRIEND HAVE CANDY
+  108: *MARY ARRIVE                                                  WOMAN ARRIVE
+  113: *SHOOT CAR *WHO *MARY *BUY1                                   IX CAR BLUE SUE BUY
+  119: SUE *BUY1 *GO *ARRIVE *WHO                                    SUE BUY IX CAR BLUE
+  122: JOHN READ BOOK                                                JOHN READ BOOK
+  139: *IX *BUY1 WHAT *EAT BOOK                                      JOHN BUY WHAT YESTERDAY BOOK
+  142: JOHN BUY YESTERDAY WHAT BOOK                                  JOHN BUY YESTERDAY WHAT BOOK
+  158: LOVE *WHO *VEGETABLE                                          LOVE JOHN WHO
+  167: *IX IX *IX LOVE MARY                                          JOHN IX SAY LOVE MARY
+  171: *LIKE MARY BLAME                                              JOHN MARY BLAME
+  174: *ARRIVE GROUP GIVE1 *WHO *BLAME                               PEOPLE GROUP GIVE1 JANA TOY
+  181: *MARY ARRIVE                                                  JOHN ARRIVE
+  184: ALL BOY *GIVE1 TEACHER APPLE                                  ALL BOY GIVE TEACHER APPLE
+  189: *TOY1 *IX GIRL *ARRIVE                                        JOHN GIVE GIRL BOX
+  193: *IX *GIVE1 GIRL BOX                                           JOHN GIVE GIRL BOX
+  199: *JOHN CHOCOLATE WHO                                           LIKE CHOCOLATE WHO
+  201: JOHN *WHO *WHO *LIKE BUY HOUSE                                JOHN TELL MARY IX-1P BUY HOUSE
+In [55]:
+# TODO Choose a feature set and model selector
+features = features_delta + features_minmax_norm_polar # change as needed
+model_selector = SelectorBIC # change as needed
+
+# TODO Recognize the test set and display the result with the show_errors method
+models = train_all_words(features, model_selector)
+test_set = asl.build_test(features)
+probabilities, guesses = recognize(models, test_set)
+show_errors(guesses, test_set)
+**** WER = 0.5056179775280899
+Total correct: 88 out of 178
+Video  Recognized                                                    Correct
+=====================================================================================================
+    2: *POSS WRITE HOMEWORK                                          JOHN WRITE HOMEWORK
+    7: JOHN *STUDENT GO CAN                                          JOHN CAN GO CAN
+   12: JOHN CAN *PEOPLE *HOUSE                                       JOHN CAN GO CAN
+   21: *MARY *YESTERDAY WONT *MARY *GIVE1 *CAR *FUTURE *MARY         JOHN FISH WONT EAT BUT CAN EAT CHICKEN
+   25: *MARY LIKE *MARY IX IX                                        JOHN LIKE IX IX IX
+   28: JOHN *MARY *MARY *LIKE *LIKE                                  JOHN LIKE IX IX IX
+   30: JOHN *MARY *SHOULD *MARY *SHOULD                              JOHN LIKE IX IX IX
+   36: *JOHN *WHO *APPLE *GIVE *POSS *MARY                           MARY VEGETABLE KNOW IX LIKE CORN1
+   40: JOHN *GIVE *APPLE *JOHN *WONT                                 JOHN IX THINK MARY LOVE
+   43: JOHN *FRANK BUY HOUSE                                         JOHN MUST BUY HOUSE
+   50: *JOHN *WHO BUY CAR *ARRIVE                                    FUTURE JOHN BUY CAR SHOULD
+   54: JOHN *NOT *FUTURE BUY HOUSE                                   JOHN SHOULD NOT BUY HOUSE
+   57: *IX *WOMAN *GIVE MARY                                         JOHN DECIDE VISIT MARY
+   67: JOHN FUTURE *MARY BUY HOUSE                                   JOHN FUTURE NOT BUY HOUSE
+   71: JOHN *FUTURE VISIT MARY                                       JOHN WILL VISIT MARY
+   74: JOHN *WOMAN *GIVE MARY                                        JOHN NOT VISIT MARY
+   77: *MARY BLAME MARY                                              ANN BLAME MARY
+   84: *JOHN *NEW *WONT BOOK                                         IX-1P FIND SOMETHING-ONE BOOK
+   89: *IX *SOMETHING-ONE GIVE *WOMAN IX NEW *HOUSE                  JOHN IX GIVE MAN IX NEW COAT
+   90: JOHN *GIVE1 IX *IX WOMAN *FRIEND                              JOHN GIVE IX SOMETHING-ONE WOMAN BOOK
+   92: JOHN *WHO *WOMAN *WOMAN *POSS BOOK                            JOHN GIVE IX SOMETHING-ONE WOMAN BOOK
+  100: POSS NEW CAR BREAK-DOWN                                       POSS NEW CAR BREAK-DOWN
+  105: JOHN *WHO                                                     JOHN LEG
+  107: JOHN POSS FRIEND HAVE *MARY                                   JOHN POSS FRIEND HAVE CANDY
+  108: *IX ARRIVE                                                    WOMAN ARRIVE
+  113: IX CAR *MARY *MARY *BUY1                                      IX CAR BLUE SUE BUY
+  119: *WHO *BUY1 IX CAR *MARY                                       SUE BUY IX CAR BLUE
+  122: JOHN READ BOOK                                                JOHN READ BOOK
+  139: JOHN *BUY1 WHAT *MARY *FRIEND                                 JOHN BUY WHAT YESTERDAY BOOK
+  142: JOHN BUY YESTERDAY WHAT BOOK                                  JOHN BUY YESTERDAY WHAT BOOK
+  158: LOVE JOHN WHO                                                 LOVE JOHN WHO
+  167: JOHN *MARY *WOMAN LOVE MARY                                   JOHN IX SAY LOVE MARY
+  171: *MARY *JOHN BLAME                                             JOHN MARY BLAME
+  174: *GIVE1 GROUP GIVE1 *WHO *WANT                                 PEOPLE GROUP GIVE1 JANA TOY
+  181: *WHO ARRIVE                                                   JOHN ARRIVE
+  184: ALL BOY *GIVE1 TEACHER APPLE                                  ALL BOY GIVE TEACHER APPLE
+  189: JOHN *JOHN *WOMAN *ARRIVE                                     JOHN GIVE GIRL BOX
+  193: JOHN *SOMETHING-ONE *APPLE BOX                                JOHN GIVE GIRL BOX
+  199: *JOHN CHOCOLATE *MARY                                         LIKE CHOCOLATE WHO
+  201: JOHN *WHO *GIVE *LIKE BUY HOUSE                               JOHN TELL MARY IX-1P BUY HOUSE
+In [56]:
+# TODO Choose a feature set and model selector
+features = features_delta + features_minmax_norm_polar # change as needed
+model_selector = SelectorDIC # change as needed
+
+# TODO Recognize the test set and display the result with the show_errors method
+models = train_all_words(features, model_selector)
+test_set = asl.build_test(features)
+probabilities, guesses = recognize(models, test_set)
+show_errors(guesses, test_set)
+**** WER = 0.5674157303370787
+Total correct: 77 out of 178
+Video  Recognized                                                    Correct
+=====================================================================================================
+    2: JOHN *BUY *CAN                                                JOHN WRITE HOMEWORK
+    7: JOHN *NEW *IX *WHAT                                           JOHN CAN GO CAN
+   12: JOHN CAN *JOHN *HOUSE                                         JOHN CAN GO CAN
+   21: *MARY *BROTHER *MARY *MARY *GIVE1 *SELL *FUTURE *MARY         JOHN FISH WONT EAT BUT CAN EAT CHICKEN
+   25: *MARY *IX IX IX IX                                            JOHN LIKE IX IX IX
+   28: JOHN *MARY *MARY IX IX                                        JOHN LIKE IX IX IX
+   30: JOHN *MARY *LOVE IX *SHOULD                                   JOHN LIKE IX IX IX
+   36: *JOHN *IX *GIRL *GIVE *JOHN *MARY                             MARY VEGETABLE KNOW IX LIKE CORN1
+   40: JOHN IX *WHO *JOHN LOVE                                       JOHN IX THINK MARY LOVE
+   43: JOHN *IX BUY HOUSE                                            JOHN MUST BUY HOUSE
+   50: *JOHN *FUTURE BUY CAR *ARRIVE                                 FUTURE JOHN BUY CAR SHOULD
+   54: JOHN *WHO *FUTURE BUY HOUSE                                   JOHN SHOULD NOT BUY HOUSE
+   57: *IX *VISIT *IX MARY                                           JOHN DECIDE VISIT MARY
+   67: JOHN *WHO *IX BUY HOUSE                                       JOHN FUTURE NOT BUY HOUSE
+   71: JOHN *FUTURE VISIT MARY                                       JOHN WILL VISIT MARY
+   74: JOHN *IX *IX MARY                                             JOHN NOT VISIT MARY
+   77: *MARY BLAME MARY                                              ANN BLAME MARY
+   84: *JOHN *JOHN *GIVE1 BOOK                                       IX-1P FIND SOMETHING-ONE BOOK
+   89: *IX IX *IX *IX IX *ARRIVE *CAN                                JOHN IX GIVE MAN IX NEW COAT
+   90: JOHN *IX IX *IX *IX BOOK                                      JOHN GIVE IX SOMETHING-ONE WOMAN BOOK
+   92: JOHN *WHO *FRANK *YESTERDAY *IX BOOK                          JOHN GIVE IX SOMETHING-ONE WOMAN BOOK
+  100: POSS *BUY CAR BREAK-DOWN                                      POSS NEW CAR BREAK-DOWN
+  105: JOHN *WHO                                                     JOHN LEG
+  107: JOHN POSS *BOOK *JOHN *MARY                                   JOHN POSS FRIEND HAVE CANDY
+  108: *WHO ARRIVE                                                   WOMAN ARRIVE
+  113: *JOHN CAR *MARY *MARY *BUY1                                   IX CAR BLUE SUE BUY
+  119: *PREFER *BUY1 IX CAR *MARY                                    SUE BUY IX CAR BLUE
+  122: JOHN *GIVE1 BOOK                                              JOHN READ BOOK
+  139: JOHN *BUY1 WHAT *MARY BOOK                                    JOHN BUY WHAT YESTERDAY BOOK
+  142: JOHN BUY *FUTURE WHAT BOOK                                    JOHN BUY YESTERDAY WHAT BOOK
+  158: LOVE JOHN WHO                                                 LOVE JOHN WHO
+  167: JOHN *MARY *IX LOVE MARY                                      JOHN IX SAY LOVE MARY
+  171: *MARY *JOHN BLAME                                             JOHN MARY BLAME
+  174: *BOOK *LOVE GIVE1 *WHO *ARRIVE                                PEOPLE GROUP GIVE1 JANA TOY
+  181: *WHO ARRIVE                                                   JOHN ARRIVE
+  184: ALL *GIRL *GIVE1 TEACHER *GIRL                                ALL BOY GIVE TEACHER APPLE
+  189: JOHN *IX *FUTURE *ARRIVE                                      JOHN GIVE GIRL BOX
+  193: *IX *IX *FUTURE BOX                                           JOHN GIVE GIRL BOX
+  199: *JOHN *LOVE *MARY                                             LIKE CHOCOLATE WHO
+  201: JOHN *WHO *WHO *WOMAN BUY HOUSE                               JOHN TELL MARY IX-1P BUY HOUSE
+In [57]:
+# TODO Choose a feature set and model selector
+features = features_delta + features_minmax_norm_polar # change as needed
+model_selector = SelectorCV # change as needed
+
+# TODO Recognize the test set and display the result with the show_errors method
+models = train_all_words(features, model_selector)
+test_set = asl.build_test(features)
+probabilities, guesses = recognize(models, test_set)
+show_errors(guesses, test_set)
+**** WER = 0.6404494382022472
+Total correct: 64 out of 178
+Video  Recognized                                                    Correct
+=====================================================================================================
+    2: *POSS WRITE HOMEWORK                                          JOHN WRITE HOMEWORK
+    7: *IX *BUY GO *CAR                                              JOHN CAN GO CAN
+   12: *IX CAN *PEOPLE CAN                                           JOHN CAN GO CAN
+   21: *MARY *CHOCOLATE WONT *SEE *CAR *CAR *CHICAGO CHICKEN         JOHN FISH WONT EAT BUT CAN EAT CHICKEN
+   25: *IX *MARY *MARY *MARY IX                                      JOHN LIKE IX IX IX
+   28: *IX *VEGETABLE *MARY *MARY *MARY                              JOHN LIKE IX IX IX
+   30: *LIKE *SHOULD *SHOULD IX *SHOULD                              JOHN LIKE IX IX IX
+   36: MARY *NOT *APPLE *GIVE *MARY *IX                              MARY VEGETABLE KNOW IX LIKE CORN1
+   40: *BILL *GIVE *SEE *BILL *MARY                                  JOHN IX THINK MARY LOVE
+   43: JOHN *IX BUY HOUSE                                            JOHN MUST BUY HOUSE
+   50: *POSS *WHO BUY CAR *ARRIVE                                    FUTURE JOHN BUY CAR SHOULD
+   54: *IX *VEGETABLE NOT BUY HOUSE                                  JOHN SHOULD NOT BUY HOUSE
+   57: *IX *GIVE *GIVE *IX                                           JOHN DECIDE VISIT MARY
+   67: *POSS *VEGETABLE *VISIT BUY HOUSE                             JOHN FUTURE NOT BUY HOUSE
+   71: *IX *FUTURE VISIT *GO                                         JOHN WILL VISIT MARY
+   74: *IX *GIVE *GIVE *IX                                           JOHN NOT VISIT MARY
+   77: *IX BLAME MARY                                                ANN BLAME MARY
+   84: *IX *NEW *WONT BOOK                                           IX-1P FIND SOMETHING-ONE BOOK
+   89: *IX *SOMETHING-ONE GIVE *IX IX NEW *HOUSE                     JOHN IX GIVE MAN IX NEW COAT
+   90: *PREFER *GIVE1 IX *IX WOMAN *FRIEND                           JOHN GIVE IX SOMETHING-ONE WOMAN BOOK
+   92: *IX GIVE *WOMAN *WOMAN *POSS BOOK                             JOHN GIVE IX SOMETHING-ONE WOMAN BOOK
+  100: POSS NEW CAR BREAK-DOWN                                       POSS NEW CAR BREAK-DOWN
+  105: JOHN *FRANK                                                   JOHN LEG
+  107: *IX *MARY FRIEND *MARY *SEE                                   JOHN POSS FRIEND HAVE CANDY
+  108: *IX ARRIVE                                                    WOMAN ARRIVE
+  113: IX CAR *MARY *MARY *BUY1                                      IX CAR BLUE SUE BUY
+  119: *GIVE *BUY1 *MARY CAR *VISIT                                  SUE BUY IX CAR BLUE
+  122: *IX READ BOOK                                                 JOHN READ BOOK
+  139: *IX *BUY1 WHAT *WOMAN BOOK                                    JOHN BUY WHAT YESTERDAY BOOK
+  142: *IX BUY YESTERDAY WHAT BOOK                                   JOHN BUY YESTERDAY WHAT BOOK
+  158: LOVE *WHO *SEE                                                LOVE JOHN WHO
+  167: *IX *BILL *GIVE LOVE MARY                                     JOHN IX SAY LOVE MARY
+  171: *MARY MARY BLAME                                              JOHN MARY BLAME
+  174: *CAR *VIDEOTAPE GIVE1 *WHO *WANT                              PEOPLE GROUP GIVE1 JANA TOY
+  181: *MARY ARRIVE                                                  JOHN ARRIVE
+  184: ALL *GIRL *GIVE1 TEACHER APPLE                                ALL BOY GIVE TEACHER APPLE
+  189: *IX GIVE *APPLE BOX                                           JOHN GIVE GIRL BOX
+  193: *IX *IX *APPLE BOX                                            JOHN GIVE GIRL BOX
+  199: *IX CHOCOLATE *SEE                                            LIKE CHOCOLATE WHO
+  201: *IX *NOT *SEE *POSS *STUDENT HOUSE                            JOHN TELL MARY IX-1P BUY HOUSE
+In [58]:
+# TODO Choose a feature set and model selector
+features = features_norm + features_polar + features_delta # change as needed
+model_selector = SelectorBIC # change as needed
+
+# TODO Recognize the test set and display the result with the show_errors method
+models = train_all_words(features, model_selector)
+test_set = asl.build_test(features)
+probabilities, guesses = recognize(models, test_set)
+show_errors(guesses, test_set)
+**** WER = 0.4550561797752809
+Total correct: 97 out of 178
+Video  Recognized                                                    Correct
+=====================================================================================================
+    2: JOHN WRITE *ARRIVE                                            JOHN WRITE HOMEWORK
+    7: JOHN *PEOPLE GO CAN                                           JOHN CAN GO CAN
+   12: JOHN CAN *GO1 CAN                                             JOHN CAN GO CAN
+   21: JOHN *JOHN *JOHN *MARY *CAR *CAR *FUTURE *MARY                JOHN FISH WONT EAT BUT CAN EAT CHICKEN
+   25: JOHN *IX IX IX IX                                             JOHN LIKE IX IX IX
+   28: JOHN *IX IX IX IX                                             JOHN LIKE IX IX IX
+   30: JOHN LIKE *MARY *MARY *MARY                                   JOHN LIKE IX IX IX
+   36: MARY *JOHN *GIVE *VISIT *MARY *MARY                           MARY VEGETABLE KNOW IX LIKE CORN1
+   40: JOHN *MARY *FUTURE1 *JOHN *MARY                               JOHN IX THINK MARY LOVE
+   43: JOHN *JOHN BUY HOUSE                                          JOHN MUST BUY HOUSE
+   50: *JOHN *SEE BUY CAR *IX                                        FUTURE JOHN BUY CAR SHOULD
+   54: JOHN SHOULD *FUTURE BUY HOUSE                                 JOHN SHOULD NOT BUY HOUSE
+   57: JOHN *JOHN *MARY MARY                                         JOHN DECIDE VISIT MARY
+   67: JOHN FUTURE NOT BUY HOUSE                                     JOHN FUTURE NOT BUY HOUSE
+   71: JOHN *FUTURE *JOHN MARY                                       JOHN WILL VISIT MARY
+   74: JOHN *MARY VISIT MARY                                         JOHN NOT VISIT MARY
+   77: *JOHN BLAME MARY                                              ANN BLAME MARY
+   84: *MARY *ARRIVE *CAR BOOK                                       IX-1P FIND SOMETHING-ONE BOOK
+   89: JOHN IX *IX *IX IX NEW COAT                                   JOHN IX GIVE MAN IX NEW COAT
+   90: JOHN *IX IX SOMETHING-ONE WOMAN BOOK                          JOHN GIVE IX SOMETHING-ONE WOMAN BOOK
+   92: JOHN *IX IX *IX *IX BOOK                                      JOHN GIVE IX SOMETHING-ONE WOMAN BOOK
+  100: POSS NEW CAR BREAK-DOWN                                       POSS NEW CAR BREAK-DOWN
+  105: JOHN *SEE                                                     JOHN LEG
+  107: JOHN *IX FRIEND *MARY *JOHN                                   JOHN POSS FRIEND HAVE CANDY
+  108: *MARY *MARY                                                   WOMAN ARRIVE
+  113: *JOHN CAR *JOHN *JOHN *BUY1                                   IX CAR BLUE SUE BUY
+  119: *JOHN *BUY1 IX *JOHN *IX                                      SUE BUY IX CAR BLUE
+  122: JOHN *GIVE1 BOOK                                              JOHN READ BOOK
+  139: JOHN *BUY1 WHAT *JOHN BOOK                                    JOHN BUY WHAT YESTERDAY BOOK
+  142: JOHN BUY YESTERDAY WHAT BOOK                                  JOHN BUY YESTERDAY WHAT BOOK
+  158: LOVE *MARY WHO                                                LOVE JOHN WHO
+  167: JOHN IX *MARY *MARY MARY                                      JOHN IX SAY LOVE MARY
+  171: JOHN *JOHN BLAME                                              JOHN MARY BLAME
+  174: *JOHN *GIVE1 GIVE1 *JOHN *JOHN                                PEOPLE GROUP GIVE1 JANA TOY
+  181: JOHN *BOX                                                     JOHN ARRIVE
+  184: *IX BOY *GIVE1 TEACHER APPLE                                  ALL BOY GIVE TEACHER APPLE
+  189: JOHN *JOHN GIRL *ARRIVE                                       JOHN GIVE GIRL BOX
+  193: JOHN *POSS *IX BOX                                            JOHN GIVE GIRL BOX
+  199: *JOHN *ARRIVE WHO                                             LIKE CHOCOLATE WHO
+  201: JOHN *FUTURE *IX *WOMAN BUY HOUSE                             JOHN TELL MARY IX-1P BUY HOUSE
+In [59]:
+# TODO Choose a feature set and model selector
+features = features_norm + features_polar + features_delta # change as needed
+model_selector = SelectorDIC # change as needed
+
+# TODO Recognize the test set and display the result with the show_errors method
+models = train_all_words(features, model_selector)
+test_set = asl.build_test(features)
+probabilities, guesses = recognize(models, test_set)
+show_errors(guesses, test_set)
+**** WER = 0.4943820224719101
+Total correct: 90 out of 178
+Video  Recognized                                                    Correct
+=====================================================================================================
+    2: JOHN *ARRIVE *ARRIVE                                          JOHN WRITE HOMEWORK
+    7: JOHN *JOHN *JOHN CAN                                          JOHN CAN GO CAN
+   12: JOHN CAN *JOHN CAN                                            JOHN CAN GO CAN
+   21: JOHN *JOHN *JOHN *MARY *CAR *CAR *FUTURE *MARY                JOHN FISH WONT EAT BUT CAN EAT CHICKEN
+   25: JOHN *IX IX IX IX                                             JOHN LIKE IX IX IX
+   28: JOHN *IX IX IX IX                                             JOHN LIKE IX IX IX
+   30: JOHN *MARY *MARY *MARY *MARY                                  JOHN LIKE IX IX IX
+   36: MARY *JOHN *GIVE *GO *MARY *MARY                              MARY VEGETABLE KNOW IX LIKE CORN1
+   40: JOHN *GO *JOHN *JOHN LOVE                                     JOHN IX THINK MARY LOVE
+   43: JOHN *JOHN BUY HOUSE                                          JOHN MUST BUY HOUSE
+   50: *JOHN *FRANK BUY CAR *IX                                      FUTURE JOHN BUY CAR SHOULD
+   54: JOHN SHOULD *FUTURE BUY HOUSE                                 JOHN SHOULD NOT BUY HOUSE
+   57: JOHN *JOHN *GO MARY                                           JOHN DECIDE VISIT MARY
+   67: JOHN FUTURE *JOHN BUY HOUSE                                   JOHN FUTURE NOT BUY HOUSE
+   71: JOHN *JOHN *JOHN MARY                                         JOHN WILL VISIT MARY
+   74: JOHN *MARY VISIT MARY                                         JOHN NOT VISIT MARY
+   77: *JOHN BLAME MARY                                              ANN BLAME MARY
+   84: *MARY *ARRIVE *CAR BOOK                                       IX-1P FIND SOMETHING-ONE BOOK
+   89: JOHN IX *IX *IX IX *ARRIVE *BREAK-DOWN                        JOHN IX GIVE MAN IX NEW COAT
+   90: JOHN *IX IX SOMETHING-ONE WOMAN BOOK                          JOHN GIVE IX SOMETHING-ONE WOMAN BOOK
+   92: JOHN *IX IX *IX *IX BOOK                                      JOHN GIVE IX SOMETHING-ONE WOMAN BOOK
+  100: POSS NEW CAR BREAK-DOWN                                       POSS NEW CAR BREAK-DOWN
+  105: JOHN *MARY                                                    JOHN LEG
+  107: JOHN *IX *JOHN *MARY *JOHN                                    JOHN POSS FRIEND HAVE CANDY
+  108: *MARY ARRIVE                                                  WOMAN ARRIVE
+  113: *JOHN CAR *JOHN *JOHN *ARRIVE                                 IX CAR BLUE SUE BUY
+  119: *JOHN *BUY1 IX *JOHN *IX                                      SUE BUY IX CAR BLUE
+  122: JOHN *GIVE1 BOOK                                              JOHN READ BOOK
+  139: JOHN *ARRIVE WHAT *JOHN BOOK                                  JOHN BUY WHAT YESTERDAY BOOK
+  142: JOHN BUY YESTERDAY WHAT BOOK                                  JOHN BUY YESTERDAY WHAT BOOK
+  158: LOVE *MARY *JOHN                                              LOVE JOHN WHO
+  167: JOHN IX *MARY LOVE MARY                                       JOHN IX SAY LOVE MARY
+  171: JOHN *JOHN BLAME                                              JOHN MARY BLAME
+  174: *JOHN *GIVE1 GIVE1 *JOHN *JOHN                                PEOPLE GROUP GIVE1 JANA TOY
+  181: JOHN ARRIVE                                                   JOHN ARRIVE
+  184: *IX BOY *GIVE1 TEACHER *WHO                                   ALL BOY GIVE TEACHER APPLE
+  189: JOHN *JOHN *VISIT *ARRIVE                                     JOHN GIVE GIRL BOX
+  193: JOHN *GO *IX BOX                                              JOHN GIVE GIRL BOX
+  199: *JOHN *ARRIVE *MARY                                           LIKE CHOCOLATE WHO
+  201: JOHN *FUTURE *IX *WOMAN BUY HOUSE                             JOHN TELL MARY IX-1P BUY HOUSE
+In [60]:
+# TODO Choose a feature set and model selector
+features = features_norm + features_polar + features_delta # change as needed
+model_selector = SelectorCV # change as needed
+
+# TODO Recognize the test set and display the result with the show_errors method
+models = train_all_words(features, model_selector)
+test_set = asl.build_test(features)
+probabilities, guesses = recognize(models, test_set)
+show_errors(guesses, test_set)
+**** WER = 0.4943820224719101
+Total correct: 90 out of 178
+Video  Recognized                                                    Correct
+=====================================================================================================
+    2: JOHN WRITE *ARRIVE                                            JOHN WRITE HOMEWORK
+    7: JOHN *PEOPLE *VISIT *WHAT                                     JOHN CAN GO CAN
+   12: JOHN *HAVE *WHAT CAN                                          JOHN CAN GO CAN
+   21: JOHN *NEW *SOMETHING-ONE *IX-1P *CAR *CAR *FUTURE *JOHN       JOHN FISH WONT EAT BUT CAN EAT CHICKEN
+   25: JOHN LIKE IX *LIKE IX                                         JOHN LIKE IX IX IX
+   28: JOHN LIKE IX *LIKE IX                                         JOHN LIKE IX IX IX
+   30: JOHN LIKE *MARY *LIKE *GO                                     JOHN LIKE IX IX IX
+   36: MARY VEGETABLE *IX *GO *MARY *MARY                            MARY VEGETABLE KNOW IX LIKE CORN1
+   40: JOHN *GO *PREFER MARY *MARY                                   JOHN IX THINK MARY LOVE
+   43: JOHN *FRANK BUY HOUSE                                         JOHN MUST BUY HOUSE
+   50: *FRANK *FRANK BUY CAR *MARY                                   FUTURE JOHN BUY CAR SHOULD
+   54: JOHN SHOULD *FUTURE BUY HOUSE                                 JOHN SHOULD NOT BUY HOUSE
+   57: *IX *JOHN *IX MARY                                            JOHN DECIDE VISIT MARY
+   67: *FRANK FUTURE NOT BUY HOUSE                                   JOHN FUTURE NOT BUY HOUSE
+   71: JOHN *FUTURE *BLAME MARY                                      JOHN WILL VISIT MARY
+   74: *IX *MARY *GO *GO                                             JOHN NOT VISIT MARY
+   77: *JOHN BLAME MARY                                              ANN BLAME MARY
+   84: *LOVE *ARRIVE SOMETHING-ONE BOOK                              IX-1P FIND SOMETHING-ONE BOOK
+   89: JOHN *SOMETHING-ONE *IX *IX IX NEW COAT                       JOHN IX GIVE MAN IX NEW COAT
+   90: JOHN *IX IX *IX WOMAN BOOK                                    JOHN GIVE IX SOMETHING-ONE WOMAN BOOK
+   92: JOHN *IX IX *IX WOMAN BOOK                                    JOHN GIVE IX SOMETHING-ONE WOMAN BOOK
+  100: POSS NEW CAR BREAK-DOWN                                       POSS NEW CAR BREAK-DOWN
+  105: JOHN *SEE                                                     JOHN LEG
+  107: *MARY POSS *HAVE *MARY *WHO                                   JOHN POSS FRIEND HAVE CANDY
+  108: WOMAN *HOMEWORK                                               WOMAN ARRIVE
+  113: IX CAR *CAR *MARY *ARRIVE                                     IX CAR BLUE SUE BUY
+  119: *PREFER *BUY1 *CAR CAR *MARY                                  SUE BUY IX CAR BLUE
+  122: JOHN *GIVE1 BOOK                                              JOHN READ BOOK
+  139: JOHN *BUY1 WHAT YESTERDAY BOOK                                JOHN BUY WHAT YESTERDAY BOOK
+  142: JOHN BUY YESTERDAY WHAT BOOK                                  JOHN BUY YESTERDAY WHAT BOOK
+  158: LOVE *MARY WHO                                                LOVE JOHN WHO
+  167: *MARY IX *MARY LOVE MARY                                      JOHN IX SAY LOVE MARY
+  171: *MARY *JOHN BLAME                                             JOHN MARY BLAME
+  174: *CAR *GIVE1 GIVE1 *GIRL *BLAME                                PEOPLE GROUP GIVE1 JANA TOY
+  181: *VISIT ARRIVE                                                 JOHN ARRIVE
+  184: *IX BOY *GIVE1 TEACHER APPLE                                  ALL BOY GIVE TEACHER APPLE
+  189: *MARY *IX *PREFER *ARRIVE                                     JOHN GIVE GIRL BOX
+  193: JOHN *IX *YESTERDAY BOX                                       JOHN GIVE GIRL BOX
+  199: *JOHN CHOCOLATE *MARY                                         LIKE CHOCOLATE WHO
+  201: JOHN *MAN *IX *WOMAN BUY HOUSE                                JOHN TELL MARY IX-1P BUY HOUSE
+In [61]:
+# TODO Choose a feature set and model selector
+features = features_polar + features_minmax_norm_polar + features_z_norm_polar + features_delta_polar # change as needed
+model_selector = SelectorBIC # change as needed
+
+# TODO Recognize the test set and display the result with the show_errors method
+models = train_all_words(features, model_selector)
+test_set = asl.build_test(features)
+probabilities, guesses = recognize(models, test_set)
+show_errors(guesses, test_set)
+**** WER = 0.4943820224719101
+Total correct: 90 out of 178
+Video  Recognized                                                    Correct
+=====================================================================================================
+    2: JOHN WRITE HOMEWORK                                           JOHN WRITE HOMEWORK
+    7: JOHN *CAR GO CAN                                              JOHN CAN GO CAN
+   12: JOHN *WHAT *GO1 CAN                                           JOHN CAN GO CAN
+   21: JOHN *NEW WONT *JOHN BUT *CAR *CHICAGO *FUTURE                JOHN FISH WONT EAT BUT CAN EAT CHICKEN
+   25: JOHN *MARY IX *MARY IX                                        JOHN LIKE IX IX IX
+   28: JOHN *MARY *MARY *MARY IX                                     JOHN LIKE IX IX IX
+   30: JOHN LIKE *MARY *MARY *MARY                                   JOHN LIKE IX IX IX
+   36: *VISIT VEGETABLE *GIRL *GIVE *MARY *MARY                      MARY VEGETABLE KNOW IX LIKE CORN1
+   40: JOHN *VISIT *FUTURE1 *JOHN *MARY                              JOHN IX THINK MARY LOVE
+   43: JOHN *IX BUY HOUSE                                            JOHN MUST BUY HOUSE
+   50: *JOHN *SEE BUY CAR *JOHN                                      FUTURE JOHN BUY CAR SHOULD
+   54: JOHN *JOHN NOT BUY HOUSE                                      JOHN SHOULD NOT BUY HOUSE
+   57: *MARY *VISIT VISIT MARY                                       JOHN DECIDE VISIT MARY
+   67: JOHN FUTURE *IX BUY HOUSE                                     JOHN FUTURE NOT BUY HOUSE
+   71: JOHN *FINISH *GIVE1 MARY                                      JOHN WILL VISIT MARY
+   74: *IX *VISIT *GIVE MARY                                         JOHN NOT VISIT MARY
+   77: *JOHN BLAME MARY                                              ANN BLAME MARY
+   84: *IX *STUDENT *HOMEWORK BOOK                                   IX-1P FIND SOMETHING-ONE BOOK
+   89: JOHN IX *WOMAN *IX IX NEW *BREAK-DOWN                         JOHN IX GIVE MAN IX NEW COAT
+   90: JOHN *IX IX *IX WOMAN *VIDEOTAPE                              JOHN GIVE IX SOMETHING-ONE WOMAN BOOK
+   92: JOHN *WOMAN IX *WOMAN WOMAN BOOK                              JOHN GIVE IX SOMETHING-ONE WOMAN BOOK
+  100: POSS NEW CAR BREAK-DOWN                                       POSS NEW CAR BREAK-DOWN
+  105: JOHN *SEE                                                     JOHN LEG
+  107: *MARY *IX *HAVE *MARY *MARY                                   JOHN POSS FRIEND HAVE CANDY
+  108: *MAN *COAT                                                    WOMAN ARRIVE
+  113: IX CAR BLUE *MARY *BUY1                                       IX CAR BLUE SUE BUY
+  119: *PREFER *BUY1 IX *VISIT *JOHN                                 SUE BUY IX CAR BLUE
+  122: JOHN *GIVE1 BOOK                                              JOHN READ BOOK
+  139: JOHN *BUY1 *CAR *MARY BOOK                                    JOHN BUY WHAT YESTERDAY BOOK
+  142: JOHN *NEW YESTERDAY WHAT BOOK                                 JOHN BUY YESTERDAY WHAT BOOK
+  158: LOVE JOHN *NOT                                                LOVE JOHN WHO
+  167: JOHN IX *VISIT LOVE MARY                                      JOHN IX SAY LOVE MARY
+  171: JOHN *IX BLAME                                                JOHN MARY BLAME
+  174: PEOPLE *GIVE3 GIVE1 *GIRL *BLAME                              PEOPLE GROUP GIVE1 JANA TOY
+  181: JOHN ARRIVE                                                   JOHN ARRIVE
+  184: *IX BOY *GIVE1 TEACHER *GIRL                                  ALL BOY GIVE TEACHER APPLE
+  189: JOHN *VISIT *GIVE BOX                                         JOHN GIVE GIRL BOX
+  193: JOHN *SOMETHING-ONE *GIVE BOX                                 JOHN GIVE GIRL BOX
+  199: *JOHN *HOMEWORK *JOHN                                         LIKE CHOCOLATE WHO
+  201: JOHN *MAN *IX *WOMAN BUY HOUSE                                JOHN TELL MARY IX-1P BUY HOUSE
+In [62]:
+# TODO Choose a feature set and model selector
+features = features_polar + features_minmax_norm_polar + features_z_norm_polar + features_delta_polar # change as needed
+model_selector = SelectorDIC # change as needed
+
+# TODO Recognize the test set and display the result with the show_errors method
+models = train_all_words(features, model_selector)
+test_set = asl.build_test(features)
+probabilities, guesses = recognize(models, test_set)
+show_errors(guesses, test_set)
+**** WER = 0.4887640449438202
+Total correct: 91 out of 178
+Video  Recognized                                                    Correct
+=====================================================================================================
+    2: JOHN WRITE HOMEWORK                                           JOHN WRITE HOMEWORK
+    7: JOHN *CAR GO CAN                                              JOHN CAN GO CAN
+   12: JOHN *WHAT *JOHN CAN                                          JOHN CAN GO CAN
+   21: JOHN *NEW *JOHN *JOHN *CAR *HOUSE *FUTURE *WOMAN              JOHN FISH WONT EAT BUT CAN EAT CHICKEN
+   25: JOHN *MARY IX *MARY IX                                        JOHN LIKE IX IX IX
+   28: JOHN *MARY *MARY *MARY IX                                     JOHN LIKE IX IX IX
+   30: JOHN LIKE *MARY *MARY *MARY                                   JOHN LIKE IX IX IX
+   36: MARY VEGETABLE *GIVE *GO *MARY *MARY                          MARY VEGETABLE KNOW IX LIKE CORN1
+   40: JOHN *VISIT *GIVE *JOHN *MARY                                 JOHN IX THINK MARY LOVE
+   43: JOHN *FUTURE BUY HOUSE                                        JOHN MUST BUY HOUSE
+   50: *JOHN *SEE BUY CAR *JOHN                                      FUTURE JOHN BUY CAR SHOULD
+   54: JOHN *JOHN *FUTURE BUY HOUSE                                  JOHN SHOULD NOT BUY HOUSE
+   57: *MARY *VISIT VISIT MARY                                       JOHN DECIDE VISIT MARY
+   67: JOHN FUTURE *IX BUY HOUSE                                     JOHN FUTURE NOT BUY HOUSE
+   71: JOHN *VISIT *GIVE1 MARY                                       JOHN WILL VISIT MARY
+   74: *IX *VISIT *GO MARY                                           JOHN NOT VISIT MARY
+   77: *JOHN BLAME MARY                                              ANN BLAME MARY
+   84: *IX *JOHN *HOMEWORK BOOK                                      IX-1P FIND SOMETHING-ONE BOOK
+   89: JOHN IX *IX *IX IX NEW *BREAK-DOWN                            JOHN IX GIVE MAN IX NEW COAT
+   90: JOHN *IX IX *IX WOMAN BOOK                                    JOHN GIVE IX SOMETHING-ONE WOMAN BOOK
+   92: JOHN *WOMAN IX *IX *IX BOOK                                   JOHN GIVE IX SOMETHING-ONE WOMAN BOOK
+  100: POSS NEW CAR BREAK-DOWN                                       POSS NEW CAR BREAK-DOWN
+  105: JOHN *SEE                                                     JOHN LEG
+  107: *MARY *IX *ARRIVE *MARY *MARY                                 JOHN POSS FRIEND HAVE CANDY
+  108: WOMAN *BOOK                                                   WOMAN ARRIVE
+  113: IX CAR *IX *MARY *BUY1                                        IX CAR BLUE SUE BUY
+  119: *MARY *BUY1 IX CAR *JOHN                                      SUE BUY IX CAR BLUE
+  122: JOHN *GIVE1 BOOK                                              JOHN READ BOOK
+  139: JOHN *ARRIVE WHAT *MARY BOOK                                  JOHN BUY WHAT YESTERDAY BOOK
+  142: JOHN BUY YESTERDAY WHAT BOOK                                  JOHN BUY YESTERDAY WHAT BOOK
+  158: LOVE JOHN *NOT                                                LOVE JOHN WHO
+  167: JOHN IX *VISIT LOVE MARY                                      JOHN IX SAY LOVE MARY
+  171: JOHN *IX BLAME                                                JOHN MARY BLAME
+  174: *JOHN *JOHN GIVE1 *GIVE *JOHN                                 PEOPLE GROUP GIVE1 JANA TOY
+  181: JOHN ARRIVE                                                   JOHN ARRIVE
+  184: *IX BOY *GIVE1 TEACHER *GIRL                                  ALL BOY GIVE TEACHER APPLE
+  189: JOHN *SOMETHING-ONE *VISIT BOX                                JOHN GIVE GIRL BOX
+  193: JOHN *SOMETHING-ONE *VISIT BOX                                JOHN GIVE GIRL BOX
+  199: *JOHN CHOCOLATE *JOHN                                         LIKE CHOCOLATE WHO
+  201: JOHN *FUTURE *WOMAN *JOHN BUY HOUSE                           JOHN TELL MARY IX-1P BUY HOUSE
+In [63]:
+# TODO Choose a feature set and model selector
+features = features_polar + features_minmax_norm_polar + features_z_norm_polar + features_delta_polar # change as needed
+model_selector = SelectorCV # change as needed
+
+# TODO Recognize the test set and display the result with the show_errors method
+models = train_all_words(features, model_selector)
+test_set = asl.build_test(features)
+probabilities, guesses = recognize(models, test_set)
+show_errors(guesses, test_set)
+**** WER = 0.550561797752809
+Total correct: 80 out of 178
+Video  Recognized                                                    Correct
+=====================================================================================================
+    2: *POSS WRITE *ARRIVE                                           JOHN WRITE HOMEWORK
+    7: JOHN *PEOPLE GO *ARRIVE                                       JOHN CAN GO CAN
+   12: JOHN *HOUSE *WHAT *HOUSE                                      JOHN CAN GO CAN
+   21: JOHN *NEW WONT *MARY *CAR *CAR *GO *FUTURE                    JOHN FISH WONT EAT BUT CAN EAT CHICKEN
+   25: JOHN LIKE *LOVE IX IX                                         JOHN LIKE IX IX IX
+   28: JOHN *MARY IX *LIKE IX                                        JOHN LIKE IX IX IX
+   30: *SHOULD LIKE *GO *MARY *GO                                    JOHN LIKE IX IX IX
+   36: MARY VEGETABLE *GIRL *GIVE *MARY *MARY                        MARY VEGETABLE KNOW IX LIKE CORN1
+   40: JOHN *GIVE *CORN *JOHN *GO                                    JOHN IX THINK MARY LOVE
+   43: JOHN *POSS BUY HOUSE                                          JOHN MUST BUY HOUSE
+   50: *POSS *SEE BUY CAR *ARRIVE                                    FUTURE JOHN BUY CAR SHOULD
+   54: JOHN SHOULD *FUTURE BUY HOUSE                                 JOHN SHOULD NOT BUY HOUSE
+   57: JOHN *PREFER *GIVE MARY                                       JOHN DECIDE VISIT MARY
+   67: *FRANK *YESTERDAY *WHO BUY HOUSE                              JOHN FUTURE NOT BUY HOUSE
+   71: JOHN *FUTURE *GO MARY                                         JOHN WILL VISIT MARY
+   74: JOHN *MARY *GIVE *GO                                          JOHN NOT VISIT MARY
+   77: *JOHN BLAME MARY                                              ANN BLAME MARY
+   84: *LOVE *NEW *HOMEWORK BOOK                                     IX-1P FIND SOMETHING-ONE BOOK
+   89: *IX *GIVE *WOMAN *IX IX NEW *BREAK-DOWN                       JOHN IX GIVE MAN IX NEW COAT
+   90: *GIVE1 *GIVE1 IX *IX WOMAN *VIDEOTAPE                         JOHN GIVE IX SOMETHING-ONE WOMAN BOOK
+   92: JOHN *WOMAN *WOMAN *WOMAN WOMAN BOOK                          JOHN GIVE IX SOMETHING-ONE WOMAN BOOK
+  100: POSS NEW CAR BREAK-DOWN                                       POSS NEW CAR BREAK-DOWN
+  105: JOHN *SEE                                                     JOHN LEG
+  107: JOHN *SUE *HAVE *VISIT *EAT                                   JOHN POSS FRIEND HAVE CANDY
+  108: *MAN ARRIVE                                                   WOMAN ARRIVE
+  113: IX CAR BLUE *JOHN *ARRIVE                                     IX CAR BLUE SUE BUY
+  119: *PREFER *BUY1 *CAR *ARRIVE *GO                                SUE BUY IX CAR BLUE
+  122: JOHN *GIVE1 BOOK                                              JOHN READ BOOK
+  139: JOHN *BUY1 *CAR YESTERDAY BOOK                                JOHN BUY WHAT YESTERDAY BOOK
+  142: JOHN BUY YESTERDAY WHAT BOOK                                  JOHN BUY YESTERDAY WHAT BOOK
+  158: LOVE *MARY *VEGETABLE                                         LOVE JOHN WHO
+  167: JOHN *JOHN *MARY *WOMAN MARY                                  JOHN IX SAY LOVE MARY
+  171: JOHN *JOHN BLAME                                              JOHN MARY BLAME
+  174: PEOPLE *GIVE3 GIVE1 *GIRL *BLAME                              PEOPLE GROUP GIVE1 JANA TOY
+  181: *SUE ARRIVE                                                   JOHN ARRIVE
+  184: *IX BOY *GIVE1 TEACHER *GIRL                                  ALL BOY GIVE TEACHER APPLE
+  189: JOHN *SOMETHING-ONE *YESTERDAY *ARRIVE                        JOHN GIVE GIRL BOX
+  193: JOHN *GIVE1 *GIVE BOX                                         JOHN GIVE GIRL BOX
+  199: *JOHN CHOCOLATE WHO                                           LIKE CHOCOLATE WHO
+  201: JOHN *MAN *WOMAN *LOVE *STUDENT HOUSE                         JOHN TELL MARY IX-1P BUY HOUSE
+Question 3: Summarize the error results from three combinations of features and model selectors. What was the "best" combination and why? What additional information might we use to improve our WER? For more insight on improving WER, take a look at the introduction to Part 4.
+Answer 3:
+Recognizer Unit Tests
+Run the following unit tests as a sanity check on the defined recognizer. The test simply looks for some valid values but is not exhaustive. However, the project should not be submitted if these tests don't pass.
+In [64]:
+from asl_test_recognizer import TestRecognize
+suite = unittest.TestLoader().loadTestsFromModule(TestRecognize())
+unittest.TextTestRunner().run(suite)
+..
+----------------------------------------------------------------------
+Ran 2 tests in 33.590s
+
+OK
+Out[64]:
+<unittest.runner.TextTestResult run=2 errors=0 failures=0>
+ 
